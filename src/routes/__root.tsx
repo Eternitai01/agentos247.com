@@ -11,7 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { I18nProvider } from "@/lib/i18n";
 import logoUrl from "@/assets/agentos247-logo.png";
-import faviconUrl from "@/assets/favicon.ico";
+import faviconUrl from "@/assets/favicon.png";
 import appleTouchIconUrl from "@/assets/apple-touch-icon.png";
 
 const SHARE_DESCRIPTION =
@@ -96,12 +96,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "icon",
         href: faviconUrl,
-        sizes: "32x32",
+        type: "image/png",
       },
       {
         rel: "icon",
         href: faviconUrl,
-        sizes: "16x16",
+        type: "image/png",
       },
       {
         rel: "apple-touch-icon",
