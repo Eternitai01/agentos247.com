@@ -18,7 +18,7 @@ export function Footer() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="/#pricing" className="hover:text-foreground">{t("Pricing")}</a></li>
             <li><a href="/byok" className="hover:text-foreground">{t("BYOK")}</a></li>
-            <li><a href="https://sports.agentos247.com" className="hover:text-foreground">{t("Sports")}</a></li>
+            <li><a href="https://sports.agentos247.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">{t("Sports")}</a></li>
           </ul>
         </div>
 

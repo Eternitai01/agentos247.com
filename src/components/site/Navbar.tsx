@@ -53,7 +53,7 @@ export function Navbar() {
               );
             }
             return (
-              <a key={l.label} href={l.href} className={cls}>
+              <a key={l.label} href={l.href} className={cls} target="_blank" rel="noopener noreferrer">
                 {t(l.label)}
               </a>
             );
@@ -107,6 +107,8 @@ export function Navbar() {
                 <a
                   key={l.label}
                   href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                 >
                   {t(l.label)}
