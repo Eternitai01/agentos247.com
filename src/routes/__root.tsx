@@ -11,6 +11,8 @@ import {
 import appCss from "../styles.css?url";
 import { I18nProvider } from "@/lib/i18n";
 import logoUrl from "@/assets/agentos247-logo.png";
+import faviconUrl from "@/assets/favicon.ico";
+import appleTouchIconUrl from "@/assets/apple-touch-icon.png";
 
 const SHARE_DESCRIPTION =
   "Your Agent Operating System. Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration.";
@@ -91,6 +93,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: logoUrl },
     ],
     links: [
+      {
+        rel: "icon",
+        href: faviconUrl,
+        sizes: "32x32",
+      },
+      {
+        rel: "icon",
+        href: faviconUrl,
+        sizes: "16x16",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: appleTouchIconUrl,
+        sizes: "180x180",
+      },
       {
         rel: "stylesheet",
         href: appCss,
