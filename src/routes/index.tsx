@@ -42,6 +42,8 @@ const PLANS = [
     tag: null,
     monthly: 180,
     discounted: 90,
+    monthly12: 65,
+    monthly24: 49,
     description: "For getting started with AI agents.",
     features: [
       "500 conversations/month",
@@ -58,6 +60,8 @@ const PLANS = [
     tag: "Most Popular",
     monthly: 219,
     discounted: 109,
+    monthly12: 79,
+    monthly24: 59,
     description: "Everything in Basic, plus more reach.",
     features: [
       "800 conversations/month",
@@ -72,6 +76,8 @@ const PLANS = [
     tag: "Premium",
     monthly: 552,
     discounted: 276,
+    monthly12: 199,
+    monthly24: 149,
     description: "Voice calls and personal monitoring.",
     features: [
       "1500 conversations/month",
@@ -390,7 +396,7 @@ function Pricing() {
 
         <div className="mt-14 grid md:grid-cols-3 gap-6">
           {PLANS.map((p) => {
-            const price = billing === "1m" ? p.discounted : Math.round(p.monthly * multiplier);
+            const price = billing === "1m" ? p.discounted : billing === "12m" ? p.monthly12 : p.monthly24;
             return (
               <div
                 key={p.name}
