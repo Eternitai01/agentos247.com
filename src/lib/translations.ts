@@ -27,8 +27,8 @@ export const translations: Record<string, string> = {
   "AI Expert / Assistant": "Experto / Asistente IA",
   "Live in seconds": "En vivo en segundos",
   "Agent Operating System": "Sistema Operativo de Agentes",
-  "Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration. Pay and your AI agent appears in your Telegram chat.":
-    "Sistema operativo de agente de IA seguro de nivel empresarial en tu propio servidor dedicado privado, listo para trabajar para ti. Sin configuración técnica. Sin configuración de sistema. Paga y tu agente de IA aparece en tu chat de Telegram.",
+  "Your Agent Operating System. Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration.":
+    "Tu Sistema Operativo de Agentes. Sistema operativo de agente de IA seguro de nivel empresarial en tu propio servidor dedicado privado, listo para trabajar para ti. Sin configuración técnica. Sin configuración de sistema.",
   "Get your agent": "Obtén tu agente",
   "How it works": "Cómo funciona",
   "Available on": "Disponible en",

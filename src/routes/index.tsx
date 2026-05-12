@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration. Pay and your AI agent appears in your Telegram chat.",
+          "Your Agent Operating System. Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration.",
       },
     ],
   }),
@@ -98,7 +98,7 @@ function Hero() {
           </h1>
           <p className="mt-8 max-w-xl text-lg text-muted-foreground leading-relaxed">
             <span className="block font-bold text-foreground">{t("Agent Operating System")}</span>
-            {t("Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration. Pay and your AI agent appears in your Telegram chat.")}
+            {t("Your Agent Operating System. Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration.")}
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <a

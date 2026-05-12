@@ -13,7 +13,7 @@ import { I18nProvider } from "@/lib/i18n";
 import logoUrl from "@/assets/agentos247-logo.png";
 
 const SHARE_DESCRIPTION =
-  "Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration. Pay and your AI agent appears in your Telegram chat.";
+  "Your Agent Operating System. Enterprise-grade secured AI agent operating system in your own private dedicated server, ready to work for you. No technical setup. No system configuration.";
 
 function NotFoundComponent() {
   return (
