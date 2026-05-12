@@ -390,7 +390,7 @@ function Pricing() {
 
         <div className="mt-14 grid md:grid-cols-3 gap-6">
           {PLANS.map((p) => {
-            const price = Math.round(p.monthly * multiplier);
+            const price = billing === "1m" ? p.discounted : Math.round(p.monthly * multiplier);
             return (
               <div
                 key={p.name}
@@ -415,11 +415,9 @@ function Pricing() {
                   <span className="text-5xl font-extrabold tracking-tight">€{price}</span>
                   <span className="text-muted-foreground text-sm">/mo</span>
                 </div>
-                {billing !== "1m" && (
-                  <div className="mt-1 text-sm text-muted-foreground line-through">
-                    €{p.monthly}/mo
-                  </div>
-                )}
+                <div className="mt-1 text-sm text-muted-foreground line-through">
+                  €{p.monthly}/mo
+                </div>
                 <ul className="mt-6 space-y-3 flex-1">
                   {p.features.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-sm">
