@@ -1,7 +1,18 @@
 import { SectionLabel } from "./SectionLabel";
 import { useT } from "@/lib/i18n";
 
-const local = (slug: string) => `/integrations/${slug}.svg`;
+const integrationIcons = import.meta.glob("../../../public/integrations/*.svg", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>;
+
+const local = (slug: string) =>
+  integrationIcons[`../../../public/integrations/${slug}.svg`]
+    ? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+        integrationIcons[`../../../public/integrations/${slug}.svg`],
+      )}`
+    : `/integrations/${slug}.svg`;
 
 type Tool = { name: string; src: string };
 
@@ -51,12 +62,7 @@ const row3: Tool[] = [
 
 const Pill = ({ t }: { t: Tool }) => (
   <div className="shrink-0 flex items-center gap-2.5 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold">
-    <img
-      src={t.src}
-      alt={`${t.name} logo`}
-      className="h-5 w-5 object-contain"
-      loading="eager"
-    />
+    <img src={t.src} alt={`${t.name} logo`} className="h-5 w-5 object-contain" loading="eager" />
     <span>{t.name}</span>
   </div>
 );
@@ -83,7 +89,9 @@ export function Integrations() {
           {t("50+ integrations out of the box.")}
         </h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          {t("Chat providers, AI models, productivity tools, smart home, and more — all working together.")}
+          {t(
+            "Chat providers, AI models, productivity tools, smart home, and more — all working together.",
+          )}
         </p>
         <div className="mt-12 space-y-3">
           <Marquee items={row1} direction="left" />
