@@ -7,16 +7,16 @@ import {
 } from "@/components/ui/dialog";
 import { useT } from "@/lib/i18n";
 
-const PLANS: { id: PlanId; name: string; channel: string; monthly: number; highlight?: boolean }[] = [
-  { id: "basic", name: "Basic", channel: "Telegram", monthly: 180 },
-  { id: "plus", name: "Plus", channel: "Telegram + WhatsApp", monthly: 219, highlight: true },
-  { id: "elite", name: "Elite", channel: "All channels", monthly: 552 },
+const PLANS: { id: PlanId; name: string; channel: string; monthly: number; discounted: number; monthly12: number; monthly24: number; highlight?: boolean }[] = [
+  { id: "basic", name: "Basic", channel: "Telegram", monthly: 180, discounted: 90, monthly12: 65, monthly24: 49 },
+  { id: "plus", name: "Plus", channel: "Telegram + WhatsApp", monthly: 219, discounted: 109, monthly12: 79, monthly24: 59, highlight: true },
+  { id: "elite", name: "Elite", channel: "All channels", monthly: 552, discounted: 276, monthly12: 199, monthly24: 149 },
 ];
 
 export const BILLING = [
-  { id: "monthly", label: "Monthly", save: null, mult: 1 },
-  { id: "annual", label: "Annual", save: "Save 64%", mult: 0.5 },
-  { id: "2y", label: "2 Years", save: "Save 73%", mult: 0.36 },
+  { id: "monthly", label: "Monthly", save: "Save 50%", priceKey: "discounted" as const, months: 1 },
+  { id: "annual", label: "Annual", save: "Save 64%", priceKey: "monthly12" as const, months: 12 },
+  { id: "2y", label: "2 Years", save: "Save 73%", priceKey: "monthly24" as const, months: 24 },
 ] as const;
 
 export type BillingId = typeof BILLING[number]["id"];
@@ -53,7 +53,12 @@ export function AgentCheckoutDialog({
   const [agentName, setAgentName] = useState("");
   const [agreed, setAgreed] = useState(false);
 
-  const mult = BILLING.find((b) => b.id === billing)?.mult ?? 1;
+  const billingInfo = BILLING.find((b) => b.id === billing);
+  const priceKey = billingInfo?.priceKey ?? "discounted";
+  const months = billingInfo?.months ?? 1;
+  const selectedPlan = PLANS.find((p) => p.id === plan);
+  const monthlyPrice = selectedPlan?.[priceKey] ?? 0;
+  const totalDue = monthlyPrice * months;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,7 +91,8 @@ export function AgentCheckoutDialog({
 
         <div className="mt-3 space-y-1.5">
           {PLANS.map((p) => {
-            const price = Math.round(p.monthly * mult);
+            const price = p[priceKey];
+            const original = p.monthly;
             const selected = plan === p.id;
             return (
               <button
@@ -100,7 +106,10 @@ export function AgentCheckoutDialog({
                   <div className="font-bold text-sm">{t(p.name)}</div>
                   <div className="text-[11px] text-muted-foreground">{t(p.channel)}</div>
                 </div>
-                <div className="text-base font-extrabold">€{price}</div>
+                <div className="text-right">
+                  <div className="text-base font-extrabold">€{price}</div>
+                  <div className="text-[11px] text-muted-foreground line-through">€{original}</div>
+                </div>
               </button>
             );
           })}
@@ -160,6 +169,18 @@ export function AgentCheckoutDialog({
             </span>
           </label>
         </div>
+
+        {months > 1 && (
+          <div className="mt-3 rounded-lg border border-border bg-surface p-3">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs font-semibold text-muted-foreground">{t("Total due today")}:</span>
+              <span className="text-lg font-extrabold text-foreground">€{totalDue}</span>
+            </div>
+            <div className="mt-1 text-[11px] text-muted-foreground">
+              {monthlyPrice} × {months} {t("months")}
+            </div>
+          </div>
+        )}
 
         <div className="mt-4 flex gap-2">
           <button

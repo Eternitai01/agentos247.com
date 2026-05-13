@@ -1,7 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "agentos247",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts"
+  "main": "src/server.ts",
+  "routes": [
+    { "pattern": "agentos247.com/*", "zone_name": "agentos247.com" },
+    { "pattern": "www.agentos247.com/*", "zone_name": "agentos247.com" }
+  ]
 }

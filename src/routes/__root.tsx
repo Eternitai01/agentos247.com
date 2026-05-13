@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { I18nProvider } from "@/lib/i18n";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import logoUrl from "@/assets/agentos247-logo.png";
 import faviconUrl from "@/assets/favicon.png";
 import appleTouchIconUrl from "@/assets/apple-touch-icon.png";
@@ -149,6 +150,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <Outlet />
+        <ScrollToTop />
       </I18nProvider>
     </QueryClientProvider>
   );

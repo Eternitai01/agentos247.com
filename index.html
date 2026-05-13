@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgentOS 24/7 — The Transparent Future of Sports & Talent Representation</title>
+    <meta name="description" content="AgentOS 24/7 replaces industry opacity with data-driven transparency and fair pricing — powered by AI agents and licensed professionals." />
+    <meta name="author" content="AgentOS 24/7" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/favicon-192.png" />
+
+    <meta property="og:title" content="AgentOS 24/7 — Transparent Sports & Talent Representation" />
+    <meta property="og:description" content="AI-powered representation with transparent pricing, data-driven matching, and fair market valuations." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agentos247.com/" />
+    <meta property="fb:app_id" content="1922177521720591" />
+    <meta property="og:image" content="https://agentos247.com/og-image-new.jpg?v=4" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AgentOS247" />
+    <meta name="twitter:image" content="https://agentos247.com/og-image-new.jpg?v=4" />
+    <script type="module" crossorigin src="/assets/index-Cqq4oEWq.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BxL3sDDM.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+  <style>
+    #lang-selector {
+      position: relative;
+      display: none;
+    }
+    #lang-selector.ready { display: flex; align-items: center; }
+    #lang-selector-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+      white-space: nowrap;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+    #lang-selector-btn:hover { color: #0057ff; }
+    #lang-selector-btn .lang-globe { font-size: 1rem; }
+    #lang-selector-btn .lang-caret { font-size: 0.55rem; opacity: 0.45; margin-top: 1px; }
+    #lang-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+      min-width: 155px;
+      z-index: 9999;
+    }
+    #lang-dropdown.open { display: block; }
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 15px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+      font-family: inherit;
+    }
+    .lang-option:hover { background: #f3f4f6; color: #0057ff; }
+    .lang-option.active { background: #eff6ff; color: #0057ff; }
+    #back-to-top {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      width: 48px;
+      height: 48px;
+      background: #0057ff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,87,255,0.35);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 9999;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    #back-to-top:hover {
+      background: #0046d4;
+    }
+
+  /* ── Mobile responsive fixes ── */
+  @media (max-width: 1023px) {
+    /* Hero calculator: reset desktop offsets */
+    #savings-calculator {
+      margin-top: 32px !important;
+      margin-left: 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* All injected section grids → single column */
+    #security-section [style*="grid-template-columns"],
+    #club-calc-section [style*="grid-template-columns"] {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+    }
+
+    /* Fix huge desktop gaps */
+    #security-section [style*="gap:80px"],
+    #club-calc-section [style*="gap:80px"] {
+      gap: 32px !important;
+    }
+
+    /* Agent task section padding */
+    #agent-tasks-section {
+      padding: 60px 0 !important;
+    }
+
+    /* Consultation bubble: wrap on small screens */
+    #consult-bubble a {
+      font-size: 0.75rem !important;
+      padding: 7px 12px !important;
+      white-space: normal !important;
+      text-align: center !important;
+    }
+
+    /* Prevent horizontal overflow */
+    #savings-calculator,
+    #agent-tasks-section,
+    #security-section,
+    #club-calc-section {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Club calc result grid stays 2 cols (saves / traditional) */
+    #club-calc-result [style*="grid-template-columns"],
+    #calc-result [style*="grid-template-columns"] {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Security cards: 1 col on phones */
+    #security-section [style*="grid-template-columns:1fr 1fr"],
+    #security-section [style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Lang selector smaller */
+    #lang-selector-btn {
+      font-size: 0.72rem !important;
+      padding: 3px 6px !important;
+    }
+
+    /* Calculator card on mobile: less padding */
+    #savings-calculator {
+      padding: 20px !important;
+    }
+  }
+  </style>
+  <div id="lang-selector">
+    <button id="lang-selector-btn" onclick="toggleLangDropdown()">
+      <span class="lang-globe">🌍</span><span id="lang-current-label">EN</span><span class="lang-caret">▼</span>
+    </button>
+    <div id="lang-dropdown">
+      <div class="lang-option active" onclick="switchLang('en')">🇬🇧 English</div>
+      <div class="lang-option" onclick="switchLang('es')">🇪🇸 Español</div>
+      <div class="lang-option" onclick="switchLang('pt')">🇧🇷 Português</div>
+      <div class="lang-option" onclick="switchLang('fr')">🇫🇷 Français</div>
+      <div class="lang-option" onclick="switchLang('de')">🇩🇪 Deutsch</div>
+      <div class="lang-option" onclick="switchLang('it')">🇮🇹 Italiano</div>
+    </div>
+  </div>
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+  <script>
+    // Language selector
+    var currentLang = 'en';
+    var langLabels = {en:'EN', es:'ES', pt:'PT', fr:'FR', de:'DE', it:'IT'};
+
+    // Inject lang selector into nav before Get Started button
+    function initLangSelector() {
+      var nav = document.querySelector('nav');
+      if (!nav) { setTimeout(initLangSelector, 200); return; }
+      var ul = nav.querySelector('ul');
+      if (!ul) { setTimeout(initLangSelector, 200); return; }
+      var sel = document.getElementById('lang-selector');
+
+      // Desktop: inject into nav <ul> before Get Started
+      var lastLi = ul.querySelector('li:last-child');
+      if (!lastLi) { setTimeout(initLangSelector, 200); return; }
+      var li = document.createElement('li');
+      li.id = 'lang-selector-desktop-li';
+      li.style.cssText = 'display:flex;align-items:center;list-style:none;';
+      li.appendChild(sel);
+      ul.insertBefore(li, lastLi);
+
+      // Mobile: build a fresh selector injected directly into nav
+      var langs = [{code:'en',flag:'🇬🇧',label:'EN'},{code:'es',flag:'🇪🇸',label:'ES'},{code:'pt',flag:'🇧🇷',label:'PT'},{code:'fr',flag:'🇫🇷',label:'FR'},{code:'de',flag:'🇩🇪',label:'DE'},{code:'it',flag:'🇮🇹',label:'IT'}];
+      var mobileSel = document.createElement('div');
+      mobileSel.id = 'lang-selector-mobile';
+      mobileSel.style.cssText = 'position:relative;display:none;align-items:center;';
+
+      var mBtn = document.createElement('button');
+      mBtn.style.cssText = 'background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:0.8rem;font-weight:600;color:#111;padding:4px 8px;border-radius:6px;';
+      mBtn.innerHTML = '🌍 <span id="m-lang-label">EN</span> <span style="font-size:0.6rem;">▼</span>';
+
+      var mDrop = document.createElement('div');
+      mDrop.style.cssText = 'display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #e5e7eb;border-radius:10px;min-width:130px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.1);overflow:hidden;';
+
+      langs.forEach(function(l) {
+        var opt = document.createElement('div');
+        opt.style.cssText = 'padding:9px 14px;font-size:0.82rem;cursor:pointer;color:#374151;';
+        opt.textContent = l.flag + ' ' + (l.code==='en'?'English':l.code==='es'?'Español':l.code==='pt'?'Português':l.code==='fr'?'Français':l.code==='de'?'Deutsch':'Italiano');
+        opt.onmouseenter = function(){ this.style.background='#f3f4f6'; };
+        opt.onmouseleave = function(){ this.style.background=''; };
+        opt.onclick = function() {
+          switchLang(l.code);
+          var lbl = document.getElementById('m-lang-label');
+          if (lbl) lbl.textContent = l.label;
+          mDrop.style.display = 'none';
+        };
+        mDrop.appendChild(opt);
+      });
+
+      mBtn.onclick = function(e) {
+        e.stopPropagation();
+        mDrop.style.display = mDrop.style.display === 'none' ? 'block' : 'none';
+      };
+      document.addEventListener('click', function(){ mDrop.style.display='none'; });
+
+      mobileSel.appendChild(mBtn);
+      mobileSel.appendChild(mDrop);
+      nav.appendChild(mobileSel);
+
+      // Show/hide based on screen width
+      function updateMobileSelector() {
+        var isMobile = window.innerWidth < 768;
+        mobileSel.style.display = isMobile ? 'flex' : 'none';
+      }
+      updateMobileSelector();
+      window.addEventListener('resize', updateMobileSelector);
+
+      sel.classList.add('ready');
+    }
+    setTimeout(initLangSelector, 700);
+
+    window.toggleLangDropdown = function() {
+      document.getElementById('lang-dropdown').classList.toggle('open');
+    };
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#lang-selector')) {
+        document.getElementById('lang-dropdown').classList.remove('open');
+      }
+    });
+
+    window.switchLang = function(lang) {
+      document.getElementById('lang-dropdown').classList.remove('open');
+      document.getElementById('lang-current-label').textContent = langLabels[lang];
+      currentLang = lang;
+
+      // Update active state on dropdown
+      document.querySelectorAll('.lang-option').forEach(function(el) {
+        el.classList.remove('active');
+        if (el.getAttribute('onclick').indexOf("'"+lang+"'") > -1) el.classList.add('active');
+      });
+
+      // Call React's setLang directly — works for all 5 languages
+      if (window.__setLang) {
+        window.__setLang(lang);
+      }
+
+      // Apply translations to our injected sections
+      setTimeout(function() {
+        applyPricingTranslations(lang);
+        renderAgentTasks(lang);
+        updateCalcLangForLang(lang);
+      }, 150);
+    };
+
+    window.addEventListener('scroll', function() {
+      var btn = document.getElementById('back-to-top');
+      if (window.scrollY > 400) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Wait for React to render, then inject calculator after #savings section
+    var calcHtml = `
+      <div id="savings-calculator" style="background:#f8faff;border:1px solid #e0e7ff;border-radius:16px;padding:32px;margin-top:-220px;margin-left:40px;min-width:0;max-width:100%;box-sizing:border-box;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;">
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.05em;color:#0a0a0a;line-height:1.3;">
+            <span id="calc-title">Player & Club Savings Calculator</span><br><span id="calc-subtitle" style="color:#0057ff;">with AgentOS</span>
+          </div>
+          <div style="display:flex;gap:4px;background:#f0f0f0;border-radius:8px;padding:3px;flex-shrink:0;">
+            <button onclick="setCalcCurrency('€')" id="calc-cur-eur" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;background:#0057ff;color:#fff;">€</button>
+            <button onclick="setCalcCurrency('£')" id="calc-cur-gbp" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;background:transparent;color:#6b7280;">£</button>
+            <button onclick="setCalcCurrency('$')" id="calc-cur-usd" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;background:transparent;color:#6b7280;">$</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <label id="calc-contract-label" style="display:block;font-size:0.78rem;font-weight:600;color:#374151;margin-bottom:6px;">Contract Value</label>
+            <div style="position:relative;">
+              <span id="calc-cur-sym" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#9ca3af;font-weight:600;">€</span>
+              <input id="calc-contract" type="text" inputmode="numeric" placeholder="5,000,000" style="width:100%;padding:12px 14px 12px 30px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:1rem;font-weight:600;color:#111;background:#fff;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#0057ff'" onblur="this.style.borderColor='#e5e7eb'"/>
+            </div>
+          </div>
+          <div>
+            <label id="calc-commission-label" style="display:block;font-size:0.78rem;font-weight:600;color:#374151;margin-bottom:6px;">Traditional Agent Commission</label>
+            <div style="position:relative;">
+              <input id="calc-pct" type="number" placeholder="10" min="0" max="100" step="0.5" style="width:100%;padding:12px 36px 12px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:1rem;font-weight:600;color:#111;background:#fff;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#0057ff'" onblur="this.style.borderColor='#e5e7eb'"/>
+              <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#9ca3af;font-weight:600;">%</span>
+            </div>
+          </div>
+          <div>
+            <label id="calc-plan-label" style="display:block;font-size:0.78rem;font-weight:600;color:#374151;margin-bottom:6px;">AgentOS Plan</label>
+            <select id="calc-plan" style="width:100%;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:0.88rem;font-weight:600;color:#111;background:#fff;outline:none;box-sizing:border-box;cursor:pointer;" onfocus="this.style.borderColor='#0057ff'" onblur="this.style.borderColor='#e5e7eb'">
+              <option value="trust">Player Trust Plan — $2,500/mo · No deal fee</option>
+              <option value="agency">Player Full Agency Plan — $6,500/mo · 2% deal fee</option>
+              <option value="clubs">Club Plan — $6,500/mo · 2% deal fee</option>
+            </select>
+          </div>
+          <button id="calc-btn" onclick="calcSavings()" style="width:100%;padding:13px;background:#0057ff;color:#fff;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;">
+            Calculate My Savings →
+          </button>
+        </div>
+
+        <div id="calc-result" style="display:none;margin-top:24px;border-top:1px solid #e0e7ff;padding-top:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:14px;">
+              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#ef4444;margin-bottom:5px;"><span id="calc-trad-label">Traditional Agent</span></div>
+              <div id="calc-traditional" style="font-size:1.4rem;font-weight:800;color:#ef4444;line-height:1;"></div>
+              <div style="font-size:0.7rem;color:#9ca3af;margin-top:3px;"><span id="calc-fees-label">in fees</span></div>
+            </div>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;">
+              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#16a34a;margin-bottom:5px;"><span id="calc-agentos-label">AgentOS 24/7</span></div>
+              <div id="calc-agentos" style="font-size:1.4rem;font-weight:800;color:#16a34a;line-height:1;"></div>
+              <div style="font-size:0.7rem;color:#9ca3af;margin-top:3px;"><span id="calc-total-label">total cost</span></div>
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,#0057ff,#0033cc);border-radius:12px;padding:18px;text-align:center;">
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.5);margin-bottom:4px;"><span id="calc-save-label">You Save</span></div>
+            <div id="calc-savings" style="font-size:2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.04em;"></div>
+            <div id="calc-pct-saved" style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:5px;"></div>
+          </div>
+        </div>
+      </div>`;
+
+    function injectConsultBubble() {
+      var pricing = document.getElementById('pricing');
+      if (!pricing) { setTimeout(injectConsultBubble, 300); return; }
+      if (document.getElementById('consult-bubble')) return;
+      var rv = pricing.querySelector('.rv');
+      if (!rv) { setTimeout(injectConsultBubble, 400); return; }
+      // The desc `p` is the 2nd direct child of the grid (right column)
+      // Wrap it so the bubble stays in the same grid column
+      var desc = rv.querySelector('p');
+      if (!desc) { setTimeout(injectConsultBubble, 400); return; }
+      var wrapper = document.createElement('div');
+      desc.parentNode.insertBefore(wrapper, desc);
+      wrapper.appendChild(desc);
+      var bubble = document.createElement('div');
+      bubble.id = 'consult-bubble';
+      bubble.style.cssText = 'margin-top:14px;';
+      bubble.innerHTML = '<a href="https://cal.com/ai2me/30min" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:7px;background:#f0f5ff;border:1.5px solid #c7d7ff;color:#0057ff;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:999px;text-decoration:none;transition:background 0.15s,box-shadow 0.15s;" onmouseover="this.style.background=\'#dce9ff\';this.style.boxShadow=\'0 2px 12px rgba(0,87,255,0.12)\'" onmouseout="this.style.background=\'#f0f5ff\';this.style.boxShadow=\'none\'">📅 Book a consultation with our Team →</a>';
+      wrapper.appendChild(bubble);
+    }
+    setTimeout(injectConsultBubble, 900);
+
+    function injectCalculator() {
+      // Inject into hero section right column
+      var heroSection = document.getElementById('hero');
+      if (!heroSection) { setTimeout(injectCalculator, 300); return; }
+      if (document.getElementById('savings-calculator')) return;
+
+      var grid = heroSection.querySelector('.grid');
+      if (!grid) { setTimeout(injectCalculator, 400); return; }
+
+      var calcDiv = document.createElement('div');
+      calcDiv.innerHTML = calcHtml;
+      grid.appendChild(calcDiv.firstElementChild);
+    }
+
+    // Agent translations
+    var agentData = {
+      en: {
+        sectionTitle: 'What Your',
+        sectionTitleLight: 'AI Team Does',
+        sectionDesc: 'Every agent in your plan has a defined set of tasks they execute on your behalf — 24 hours a day, 7 days a week. Here\'s exactly what each one does.',
+        tabs: { players: 'Players & Coaches', talents: 'Talents', clubs: 'Clubs', brands: 'Brands' },
+        agents: {
+          dante:    { role: 'Technical Support',                       tasks: ['Onboard and configure your entire agent team','Troubleshoot any technical issue 24/7','Coordinate between your AI agents','Manage system updates and new integrations','Answer questions about your plan and billing'] },
+          bernieTania: { name: 'Bernie Brooks or Tania Freeman', role: 'Your AI Agent — Trust Plan', tasks: ['Negotiate transfers and contracts on your behalf','Review and flag unfair contract clauses','Provide real-time market valuations for your deal','Compare your offer to 1,200+ leagues\' comparable deals','Communicate with clubs, directors and intermediaries','Prepare FIFA-compliant transfer documentation','Benchmark your salary against comparable roles globally','Advise on club stability and sporting project fit','Track your contract expiry and renewal windows'] },
+          amaya:    { role: 'AI Chief of Staff — Full Agency',          tasks: ['Coordinate across your entire AI executive team','Manage your calendar — meetings, training, media, travel','Set up and confirm appointments with clubs, agents, and advisors','Handle inbound and outbound calls with number integration','Prepare strategic briefings before key negotiations','Track all your open deals, renewals, and deadlines in one place','Flag conflicts or bottlenecks across your agent team','Manage communication between your club, agents, and advisors','Align your career objectives with day-to-day AI operations','Deliver weekly executive summaries of your career status','And much more — your 24/7 executive operations layer'] },
+          henry:    { role: 'AI Chief Investment Officer — Full Agency', tasks: ['Analyse the financial upside of every contract before you sign','Model your career earnings across different deal scenarios','Advise on image rights, bonuses, and performance clauses','Identify investment and wealth-building opportunities','Assess the financial stability of clubs making you offers','Monitor your market value — and when it\'s peaking','Advise on tax-efficient contract structuring by country'] },
+          marcus:   { role: 'AI Chief Financial Officer — Full Agency', tasks: ['Oversee your full financial picture — salary, bonuses, rights','Review contract financial terms for hidden risks','Model FFP impact when clubs claim budget constraints','Flag clauses that cut your pay in relegation or injury scenarios','Advise on currency, payment schedules, and guarantees','Prepare financial summaries for your legal or tax advisors','Monitor whether clubs can actually afford to pay what they promise'] },
+          dani:     { role: 'AI Chief Medical Officer — Full Agency',   tasks: ['Design personalized injury prevention protocols for players','Review medical reports and advise on treatment plans','Audit club medical departments and flag systemic risks','Monitor squad-wide injury loads and return-to-play readiness','Flag high-risk training volumes before injuries occur','Provide second opinions on surgical recommendations','Advise agents on injury clauses in contract negotiations','Track long-term physical trends across the full squad'] },
+          maya:     { role: 'Chief Nutrition Officer — Full Agency',    tasks: ['Build personalized nutrition plans by season phase','Optimize body composition for peak performance','Design match-day and recovery nutrition protocols','Audit squad-wide nutrition practices for clubs','Align club canteen and travel catering with performance goals','Adjust plans based on training load, travel, and climate','Advise agents on nutrition-related fitness clauses in contracts','Flag nutritional deficiencies before they impact performance'] },
+          maty:     { role: 'Chief Psychology Officer — Full Agency',   tasks: ['Build mental resilience and focus programs for players','Support high-pressure moments: transfers, negotiations, finals','Coach clubs on building a high-performance squad culture','Advise on player mental readiness during contract disputes','Manage performance anxiety and slump recovery for individuals','Assess team dynamics and flag toxic culture patterns','Work through contract uncertainty and career transitions','Advise agents on psychological impact of deal timelines'] },
+          trina:    { role: 'Talent Agent — Entertainment & Influencer', tasks: ['Match you with verified brand partnership opportunities','Value your sponsorship based on real audience data','Review brand deal contracts for unfair clauses','Negotiate terms — no conflict of interest, ever','Track comparable deals in your market segment','Manage your deal pipeline and follow-ups','Provide ROI reporting for brands you partner with'] },
+          charlie:  { role: 'Talent Agent — Sports & Lifestyle',        tasks: ['Connect athletes and sports influencers with sponsors','Verify audience reach — no inflated metrics','Structure endorsement deals transparently','Benchmark your market value against comparable talent','Review brand alignment and reputational fit','Manage contract timelines and renewal alerts','Prepare deal documentation and summaries'] },
+          daniClub: { role: 'Chief Medical Officer — Full Agency',      tasks: ['Audit club medical department practices and protocols','Monitor squad injury loads and flag systemic risks','Advise on medical clauses in player contracts','Track return-to-play timelines across the full squad','Provide second opinions on surgical decisions','Design club-wide injury prevention frameworks'] },
+          mayaClub: { role: 'Chief Nutrition Officer — Full Agency',    tasks: ['Audit club nutrition programs and catering standards','Align squad-wide nutrition with performance calendar','Design travel and away-match nutrition protocols','Flag deficiencies affecting squad performance','Advise on nutrition clauses in player fitness contracts'] },
+          matyClub: { role: 'Chief Psychology Officer — Full Agency',   tasks: ['Assess squad team dynamics and culture health','Coach leadership on building high-performance environments','Flag toxic culture patterns before they damage results','Advise on managing player mental health during transfers','Support coaching staff through high-pressure periods'] },
+          amayaClub:{ role: 'AI Chief of Staff',                        tasks: ['Coordinate across all AI executives and departments','Manage the club\'s calendar — board meetings, training, press, travel','Set up and confirm appointments across all departments','Handle inbound and outbound calls with number integration','Prepare board meeting briefs and executive summaries','Manage the club\'s strategic agenda and priorities','Track KPIs across sporting, medical, and commercial divisions','Align club objectives with day-to-day operations','Flag cross-department conflicts before they escalate','Manage communication flow between all stakeholders','And much more — your 24/7 executive operations layer'] },
+          henryClub:{ role: 'AI Chief Investment Officer',              tasks: ['Analyse player acquisition ROI before transfer decisions','Model long-term squad value and asset appreciation','Evaluate stadium and infrastructure investment opportunities','Assess financial risk of high-value signings','Monitor player asset depreciation and sell-on value','Advise on investment timing for key acquisitions','Track market trends affecting player valuations globally'] },
+          marcusClub:{role: 'AI Chief Financial Officer',               tasks: ['Oversee club wage bill structure and sustainability','Review contract financial terms and long-term liability','Model FFP / Financial Fair Play compliance scenarios','Advise on revenue diversification strategies','Flag financial risks in proposed transfer deals','Prepare financial summaries for board reporting','Monitor cash flow and liquidity during transfer windows'] },
+          enzo:     { role: 'AI Sporting Director',                     tasks: ['Scout players across 1,200+ leagues worldwide','Provide fair market valuations before you make an offer','Identify overpriced targets and flag inflated agent fees','Run background checks on player transfer history','Prepare FIFA-compliant transfer and contract documentation','Compare candidates across performance, age, and cost metrics','Monitor your squad contract expiry windows','Advise on sell-on clauses and buyout structures','Alert you to emerging talents before competitors','Deliver full due diligence reports on each target'] },
+          peter:    { role: 'Brand Manager',                            tasks: ['Match your brand with verified sports and entertainment talent','Validate reach metrics — no inflated follower counts','Calculate fair sponsorship pricing based on real data','Structure deals to maximize brand ROI','Track campaign performance and deliver analytics reports','Manage talent contract timelines and renewals','Identify rising talent before market prices increase'] },
+          lisa:     { role: 'Brand Strategist',                        tasks: ['Align talent partnerships with brand identity and values','Design multi-channel campaign strategies','Measure audience sentiment and engagement quality','Build long-term ambassador programs','Identify mismatches that could harm brand reputation','Benchmark your sponsorship spend vs. competitors','Advise on exclusivity clauses and category protection'] }
+        }
+      },
+      es: {
+        sectionTitle: 'Lo que Hace',
+        sectionTitleLight: 'tu Equipo de IA',
+        sectionDesc: 'Cada agente de tu plan tiene un conjunto definido de tareas que ejecuta en tu nombre — 24 horas al día, 7 días a la semana. Aquí está exactamente lo que hace cada uno.',
+        tabs: { players: 'Jugadores y Entrenadores', talents: 'Talentos', clubs: 'Clubes', brands: 'Marcas' },
+        agents: {
+          dante:    { role: 'Soporte Técnico',                          tasks: ['Incorporar y configurar todo tu equipo de agentes','Resolver cualquier problema técnico 24/7','Coordinar entre tus agentes de IA','Gestionar actualizaciones del sistema e integraciones','Responder preguntas sobre tu plan y facturación'] },
+          bernieTania: { name: 'Bernie Brooks o Tania Freeman', role: 'Tu Agente IA — Plan Trust', tasks: ['Negociar traspasos y contratos en tu nombre','Revisar y señalar cláusulas contractuales injustas','Proporcionar valoraciones de mercado en tiempo real','Comparar tu oferta con contratos similares en 1.200+ ligas','Comunicarte con clubes, directores e intermediarios','Preparar documentación de traspasos conforme a la FIFA','Establecer referencias salariales comparables a nivel global','Asesorar sobre la estabilidad del club y el proyecto deportivo','Hacer seguimiento del vencimiento y renovación de tu contrato'] },
+          amaya:    { role: 'Directora de Gabinete IA — Full Agency',   tasks: ['Coordinar todo tu equipo ejecutivo de IA','Gestionar tu agenda — reuniones, entrenamientos, medios, viajes','Concertar y confirmar citas con clubes, agentes y asesores','Gestionar llamadas entrantes y salientes con integración de número','Preparar informes estratégicos antes de negociaciones clave','Hacer seguimiento de todos tus acuerdos, renovaciones y plazos','Detectar conflictos o cuellos de botella en tu equipo','Gestionar la comunicación entre tu club, agentes y asesores','Alinear tus objetivos profesionales con las operaciones diarias de IA','Entregar resúmenes ejecutivos semanales de tu situación profesional','Y mucho más — tu capa de operaciones ejecutivas 24/7'] },
+          henry:    { role: 'Director de Inversiones IA — Full Agency', tasks: ['Analizar el potencial financiero de cada contrato antes de firmarlo','Modelar tus ingresos profesionales en distintos escenarios','Asesorar sobre derechos de imagen, bonus y cláusulas de rendimiento','Identificar oportunidades de inversión y generación de patrimonio','Evaluar la estabilidad financiera de los clubes que te ofrecen contrato','Monitorizar tu valor de mercado — y cuándo está en su punto máximo','Asesorar sobre estructuras contractuales fiscalmente eficientes por país'] },
+          marcus:   { role: 'Director Financiero IA — Full Agency',     tasks: ['Supervisar tu situación financiera completa — salario, bonus, derechos','Revisar los términos financieros del contrato en busca de riesgos ocultos','Modelar el impacto del FPF cuando los clubes alegan restricciones presupuestarias','Señalar cláusulas que reduzcan tu pago en caso de descenso o lesión','Asesorar sobre divisa, calendarios de pagos y garantías','Preparar resúmenes financieros para tus asesores legales o fiscales','Monitorizar si los clubes pueden realmente pagar lo que prometen'] },
+          dani:     { role: 'Directora Médica IA — Full Agency',        tasks: ['Diseñar protocolos personalizados de prevención de lesiones','Revisar informes médicos y asesorar sobre planes de tratamiento','Auditar departamentos médicos de clubes y señalar riesgos sistémicos','Monitorizar cargas de lesiones en la plantilla y tiempos de recuperación','Señalar volúmenes de entrenamiento de alto riesgo antes de que ocurran lesiones','Proporcionar segundas opiniones sobre recomendaciones quirúrgicas','Asesorar a agentes sobre cláusulas de lesión en negociaciones','Hacer seguimiento de tendencias físicas a largo plazo en toda la plantilla'] },
+          maya:     { role: 'Directora de Nutrición IA — Full Agency',  tasks: ['Elaborar planes de nutrición personalizados por fase de temporada','Optimizar la composición corporal para el máximo rendimiento','Diseñar protocolos de nutrición para día de partido y recuperación','Auditar las prácticas de nutrición de toda la plantilla','Alinear la cantina y el catering de viajes del club con los objetivos de rendimiento','Ajustar planes según carga de entrenamiento, viajes y clima','Asesorar a agentes sobre cláusulas de forma física en contratos','Señalar deficiencias nutricionales antes de que afecten al rendimiento'] },
+          maty:     { role: 'Director de Psicología IA — Full Agency',  tasks: ['Desarrollar programas de resiliencia mental y concentración','Apoyar en momentos de alta presión: traspasos, negociaciones, finales','Asesorar a clubes sobre cómo construir una cultura de alto rendimiento','Asesorar sobre la preparación mental del jugador en disputas contractuales','Gestionar la ansiedad de rendimiento y la recuperación de rachas negativas','Evaluar la dinámica del equipo y señalar patrones de cultura tóxica','Trabajar la incertidumbre contractual y las transiciones de carrera','Asesorar a agentes sobre el impacto psicológico de los plazos de negociación'] },
+          trina:    { role: 'Agente de Talentos — Entretenimiento e Influencer', tasks: ['Conectarte con oportunidades verificadas de asociación de marca','Valorar tu patrocinio en base a datos reales de audiencia','Revisar contratos de marca en busca de cláusulas injustas','Negociar términos — sin conflicto de interés, nunca','Hacer seguimiento de acuerdos comparables en tu segmento de mercado','Gestionar tu cartera de acuerdos y seguimientos','Proporcionar informes de ROI para las marcas con las que colaboras'] },
+          charlie:  { role: 'Agente de Talentos — Deportes y Lifestyle', tasks: ['Conectar atletas e influencers deportivos con patrocinadores','Verificar el alcance de audiencia — sin métricas infladas','Estructurar acuerdos de endorsement de forma transparente','Establecer referencias de valor de mercado frente a talentos comparables','Revisar la alineación de marca y el encaje reputacional','Gestionar plazos de contratos y alertas de renovación','Preparar documentación y resúmenes de acuerdos'] },
+          daniClub: { role: 'Directora Médica IA — Full Agency',        tasks: ['Auditar las prácticas y protocolos del departamento médico del club','Monitorizar cargas de lesiones de la plantilla y señalar riesgos sistémicos','Asesorar sobre cláusulas médicas en contratos de jugadores','Hacer seguimiento de los tiempos de recuperación en toda la plantilla','Proporcionar segundas opiniones sobre decisiones quirúrgicas','Diseñar marcos de prevención de lesiones para todo el club'] },
+          mayaClub: { role: 'Directora de Nutrición IA — Full Agency',  tasks: ['Auditar los programas de nutrición y los estándares de catering del club','Alinear la nutrición de toda la plantilla con el calendario de rendimiento','Diseñar protocolos de nutrición para viajes y partidos fuera de casa','Señalar deficiencias que afecten al rendimiento de la plantilla','Asesorar sobre cláusulas de forma física en contratos de jugadores'] },
+          matyClub: { role: 'Director de Psicología IA — Full Agency',  tasks: ['Evaluar la dinámica del equipo y la salud cultural de la plantilla','Asesorar al liderazgo sobre cómo construir entornos de alto rendimiento','Señalar patrones de cultura tóxica antes de que dañen los resultados','Asesorar sobre la gestión de la salud mental de jugadores durante traspasos','Apoyar al cuerpo técnico en períodos de alta presión'] },
+          amayaClub:{ role: 'Directora de Gabinete IA',                 tasks: ['Coordinar todos los ejecutivos de IA y departamentos','Gestionar la agenda del club — reuniones de junta, entrenamientos, prensa, viajes','Concertar y confirmar citas en todos los departamentos','Gestionar llamadas entrantes y salientes con integración de número','Preparar informes y resúmenes para reuniones de junta','Gestionar la agenda estratégica del club y sus prioridades','Hacer seguimiento de KPIs en las divisiones deportiva, médica y comercial','Alinear los objetivos del club con las operaciones diarias','Detectar conflictos entre departamentos antes de que escalen','Gestionar el flujo de comunicación entre todas las partes interesadas','Y mucho más — tu capa de operaciones ejecutivas 24/7'] },
+          henryClub:{ role: 'Director de Inversiones IA',               tasks: ['Analizar el ROI de las adquisiciones de jugadores antes de tomar decisiones','Modelar el valor a largo plazo de la plantilla y la apreciación de activos','Evaluar oportunidades de inversión en estadio e infraestructuras','Evaluar el riesgo financiero de fichajes de alto valor','Monitorizar la depreciación de activos de jugadores y el valor de reventa','Asesorar sobre el momento óptimo de inversión para adquisiciones clave','Hacer seguimiento de las tendencias de mercado que afectan a las valoraciones'] },
+          marcusClub:{role: 'Director Financiero IA',                   tasks: ['Supervisar la estructura de la masa salarial del club y su sostenibilidad','Revisar los términos financieros de los contratos y el pasivo a largo plazo','Modelar escenarios de cumplimiento del FPF / Fair Play Financiero','Asesorar sobre estrategias de diversificación de ingresos','Señalar riesgos financieros en operaciones de traspaso propuestas','Preparar resúmenes financieros para informes de la junta directiva','Monitorizar el flujo de caja y la liquidez durante las ventanas de traspasos'] },
+          enzo:     { role: 'Director Deportivo IA',                    tasks: ['Ojeadores en más de 1.200 ligas de todo el mundo','Proporcionar valoraciones justas de mercado antes de hacer una oferta','Identificar objetivos sobrevalorados y señalar honorarios de agente inflados','Realizar comprobaciones antecedentes del historial de traspasos del jugador','Preparar documentación de traspasos y contratos conforme a la FIFA','Comparar candidatos según rendimiento, edad y métricas de coste','Monitorizar las ventanas de vencimiento de contratos de tu plantilla','Asesorar sobre cláusulas de reventa y estructuras de cláusula de rescisión','Alertarte sobre talentos emergentes antes que la competencia','Entregar informes completos de due diligence sobre cada objetivo'] },
+          peter:    { role: 'Director de Marca',                        tasks: ['Conectar tu marca con talentos verificados del deporte y entretenimiento','Validar métricas de alcance — sin recuentos inflados de seguidores','Calcular precios justos de patrocinio basados en datos reales','Estructurar acuerdos para maximizar el ROI de la marca','Hacer seguimiento del rendimiento de campañas y entregar informes de analítica','Gestionar plazos de contratos de talentos y renovaciones','Identificar talentos emergentes antes de que suban los precios de mercado'] },
+          lisa:     { role: 'Estratega de Marca',                       tasks: ['Alinear las asociaciones de talento con la identidad y valores de marca','Diseñar estrategias de campaña multicanal','Medir el sentimiento de la audiencia y la calidad del engagement','Desarrollar programas de embajadores a largo plazo','Identificar desajustes que puedan dañar la reputación de marca','Comparar tu gasto en patrocinio frente a la competencia','Asesorar sobre cláusulas de exclusividad y protección de categoría'] }
+        }
+      }
+    };
+
+    function renderAgentTasks(lang) {
+      var s = agentData[lang] || agentData.en;
+      var a = s.agents;
+
+      // Update section header
+      var titleEl = document.querySelector('#agent-tasks-section h2');
+      if (titleEl) titleEl.innerHTML = s.sectionTitle + '<br><span style="font-weight:300;color:#6b7280;">' + s.sectionTitleLight + '</span>';
+      var descEl = document.querySelector('#agent-tasks-section > div > div > p');
+      if (descEl) descEl.textContent = s.sectionDesc;
+
+      // Update tab labels
+      ['players','talents','clubs','brands'].forEach(function(p) {
+        var btn = document.getElementById('tab-'+p);
+        if (btn) btn.textContent = s.tabs[p];
+      });
+
+      function makeCard(img, name, role, color, tasks) {
+        var initials = name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+        var dots = tasks.map(function(t){
+          return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:'+color+';font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';
+        }).join('');
+        return '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:28px;">' +
+          '<div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">' +
+          '<img src="/assets/'+img+'" alt="'+name+'" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/>' +
+          '<div style="display:none;width:52px;height:52px;border-radius:12px;background:'+color+';color:#fff;font-size:1.1rem;font-weight:800;align-items:center;justify-content:center;flex-shrink:0;">'+initials+'</div>' +
+          '<div><h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">'+name+'</h4>' +
+          '<span style="font-size:0.75rem;color:'+color+';font-weight:600;">'+role+'</span></div></div>' +
+          '<ul style="list-style:none;margin:0;padding:0;">'+dots+'</ul></div>';
+      }
+
+      function makeBernieTania(lang) {
+        var d = s.agents.bernieTania;
+        var dots = d.tasks.map(function(t){
+          return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#0057ff;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';
+        }).join('');
+        return '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:28px;">' +
+          '<div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">' +
+          '<div style="display:flex;gap:-8px;">' +
+          '<img src="/assets/bernie-brooks-CcZjk6hi.png" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>' +
+          '<img src="/assets/tania-freeman-DOFELQSK.png" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;margin-left:-12px;"/>' +
+          '</div><div><h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">'+d.name+'</h4>' +
+          '<span style="font-size:0.75rem;color:#0057ff;font-weight:600;">'+d.role+'</span></div></div>' +
+          '<ul style="list-style:none;margin:0;padding:0;">'+dots+'</ul></div>';
+      }
+
+      function makeCLevelCard(img, name, role, tasks) {
+        var initials = name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+        var dots = tasks.map(function(t){
+          return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#7c3aed;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';
+        }).join('');
+        return '<div style="background:#fff;border:1px solid #e0d4ff;border-radius:14px;padding:28px;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">' +
+          '<div style="display:flex;align-items:center;gap:14px;">' +
+          '<img src="/assets/'+img+'" alt="'+name+'" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/>' +
+          '<div style="display:none;width:52px;height:52px;border-radius:12px;background:#7c3aed;color:#fff;font-size:1.1rem;font-weight:800;align-items:center;justify-content:center;flex-shrink:0;">'+initials+'</div>' +
+          '<div><h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">'+name+'</h4>' +
+          '<span style="font-size:0.75rem;color:#7c3aed;font-weight:600;">'+role+'</span></div></div>' +
+          '<span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:#f3e8ff;color:#7c3aed;padding:4px 10px;border-radius:20px;white-space:nowrap;">C-Level AI</span>' +
+          '</div><ul style="list-style:none;margin:0;padding:0;">'+dots+'</ul></div>';
+      }
+
+      var pp = document.getElementById('plan-players');
+      if (pp) pp.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">' +
+        makeCard('dante-k-C9-79MAO.png','Dante K.',a.dante.role,'#6366f1',a.dante.tasks) +
+        makeBernieTania() +
+        makeCLevelCard('amaya-sinclair-D64ReIsy.png','Amaya Sinclair',a.amaya.role,a.amaya.tasks) +
+        makeCLevelCard('henry-blackwell-BKwx9mQp.jpg','Henry Blackwell',a.henry.role,a.henry.tasks) +
+        makeCLevelCard('marcus-webb-D2g7uHV9.png','Marcus Webb',a.marcus.role,a.marcus.tasks) +
+        makeCLevelCard('dani-eastwood-B1gBcZu5.jpg','Dr. Dani Eastwood',a.dani.role,a.dani.tasks) +
+        makeCLevelCard('maya-brioni-CvJRpM3R.jpg','Maya Brioni',a.maya.role,a.maya.tasks) +
+        makeCLevelCard('maty-bianco-DA3fcDsv.jpg','Maty Bianco',a.maty.role,a.maty.tasks) +
+        '</div>';
+
+      var pt = document.getElementById('plan-talents');
+      if (pt) pt.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">' +
+        makeCard('dante-k-C9-79MAO.png','Dante K.',a.dante.role,'#6366f1',a.dante.tasks) +
+        makeCard('trina-pia-Bhzuoinu.png','Trina Pia',a.trina.role,'#0057ff',a.trina.tasks) +
+        makeCard('charlie-nens-CjJU06NY.png','Charlie Nens',a.charlie.role,'#0057ff',a.charlie.tasks) +
+        '</div>';
+
+      var pc = document.getElementById('plan-clubs');
+      if (pc) pc.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">' +
+        makeCard('dante-k-C9-79MAO.png','Dante K.',a.dante.role,'#6366f1',a.dante.tasks) +
+        makeCard('amaya-sinclair-D64ReIsy.png','Amaya Sinclair',a.amayaClub.role,'#0057ff',a.amayaClub.tasks) +
+        makeCard('henry-blackwell-BKwx9mQp.jpg','Henry Blackwell',a.henryClub.role,'#0057ff',a.henryClub.tasks) +
+        makeCard('marcus-webb-D2g7uHV9.png','Marcus Webb',a.marcusClub.role,'#0057ff',a.marcusClub.tasks) +
+        makeCard('dani-eastwood-B1gBcZu5.jpg','Dr. Dani Eastwood',a.daniClub.role,'#7c3aed',a.daniClub.tasks) +
+        makeCard('maya-brioni-CvJRpM3R.jpg','Maya Brioni',a.mayaClub.role,'#7c3aed',a.mayaClub.tasks) +
+        makeCard('maty-bianco-DA3fcDsv.jpg','Maty Bianco',a.matyClub.role,'#7c3aed',a.matyClub.tasks) +
+        makeCard('enzo-rubio-CMnamtEQ.png','Enzo Rubio',a.enzo.role,'#0057ff',a.enzo.tasks) +
+        '</div>';
+
+      var pb = document.getElementById('plan-brands');
+      if (pb) pb.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">' +
+        makeCard('dante-k-C9-79MAO.png','Dante K.',a.dante.role,'#6366f1',a.dante.tasks) +
+        makeCard('peter-wilson-BnpxIz94.png','Peter Wilson',a.peter.role,'#0057ff',a.peter.tasks) +
+        makeCard('lisa-penn-BMFeBVkD.png','Lisa Penn',a.lisa.role,'#0057ff',a.lisa.tasks) +
+        '</div>';
+    }
+
+    // Watch for language changes and update calculator text
+    var calcStrings = {
+      en: {
+        title: 'Player & Club Savings Calculator',
+        subtitle: 'with AgentOS',
+        contract: 'Contract Value',
+        commission: 'Traditional Agent Commission',
+        planLabel: 'AgentOS Plan',
+        btn: 'Calculate My Savings →',
+        plans: [
+          'Player Trust Plan — $2,500/mo · No deal fee',
+          'Player Full Agency Plan — $6,500/mo · 2% deal fee',
+          'Club Plan — $6,500/mo · 2% deal fee'
+        ],
+        tradLabel: 'Traditional Agent',
+        agentosLabel: 'AgentOS 24/7',
+        fees: 'in fees',
+        totalCost: 'total cost',
+        youSave: 'You Save',
+        pctLess: '% less than a traditional agent',
+        // Club calc
+        clubTitle: 'Club Agency Fee Calculator',
+        clubSubtitle: 'with AgentOS',
+        clubFeesLabel: 'Agency / Intermediary Fees Paid Last Year',
+        clubTransfersLabel: 'Total Transfer Spend Last Year',
+        clubBtn: 'Show My Club\'s Savings →',
+        clubTradLabel: 'What You Paid',
+        clubAgentosLabel: 'With AgentOS',
+        clubFeesNote: 'last year in fees',
+        clubCostNote: 'annual cost',
+        clubSaveLabel: 'Your Club Saves',
+        clubPctLess: '% less than traditional intermediary fees',
+        clubFootnote: 'AgentOS Clubs = €78K/year subscription + 2% on transfer spend. No hidden fees.',
+        howToUse: 'How to use',
+        howTo: [
+          'Enter the total your club paid to intermediaries/agents last year',
+          'Enter your total transfer spend (all signings combined)',
+          'Select your preferred currency (€ £ $)',
+          'Hit the button — see exactly what AgentOS would have cost you'
+        ],
+        tip: 'Tip: Find your club\'s intermediary payments in the official FIFA TMS or your national federation\'s published data.'
+      },
+      es: {
+        title: 'Calculadora de Ahorro Jugador & Club',
+        subtitle: 'con AgentOS',
+        contract: 'Valor del Contrato',
+        commission: 'Comisión del Agente Tradicional',
+        planLabel: 'Plan AgentOS',
+        btn: 'Calcular mi Ahorro →',
+        plans: [
+          'Plan Trust Jugador — $2,500/mes · Sin comisión por trato',
+          'Plan Full Agency Jugador — $6,500/mes · 2% por trato',
+          'Plan Club — $6,500/mes · 2% por trato'
+        ],
+        tradLabel: 'Agente Tradicional',
+        agentosLabel: 'AgentOS 24/7',
+        fees: 'en comisiones',
+        totalCost: 'coste total',
+        youSave: 'Ahorras',
+        pctLess: '% menos que con un agente tradicional',
+        // Club calc
+        clubTitle: 'Calculadora de Honorarios de Agencia',
+        clubSubtitle: 'con AgentOS',
+        clubFeesLabel: 'Honorarios de Intermediarios Pagados el Año Pasado',
+        clubTransfersLabel: 'Gasto Total en Traspasos el Año Pasado',
+        clubBtn: 'Ver el Ahorro de mi Club →',
+        clubTradLabel: 'Lo que Pagaste',
+        clubAgentosLabel: 'Con AgentOS',
+        clubFeesNote: 'en honorarios el año pasado',
+        clubCostNote: 'coste anual',
+        clubSaveLabel: 'Tu Club Ahorra',
+        clubPctLess: '% menos que con honorarios tradicionales',
+        clubFootnote: 'AgentOS Clubs = €78K/año de suscripción + 2% sobre el gasto en traspasos. Sin costes ocultos.',
+        howToUse: 'Cómo usarla',
+        howTo: [
+          'Introduce el total que pagó tu club a intermediarios/agentes el año pasado',
+          'Introduce el gasto total en traspasos (todos los fichajes combinados)',
+          'Selecciona tu moneda preferida (€ £ $)',
+          'Pulsa el botón — ve exactamente lo que te habría costado AgentOS'
+        ],
+        tip: 'Consejo: Encuentra los pagos a intermediarios de tu club en el FIFA TMS oficial o en los datos publicados por tu federación nacional.'
+      }
+    };
+
+    function updateCalcLang() {
+      var calc = document.getElementById('savings-calculator');
+      if (!calc) return;
+      // Detect lang from the ES button state
+      var isEs = document.querySelector('button[class*="cursor-pointer"]') &&
+        Array.from(document.querySelectorAll('button')).some(function(b) {
+          return b.textContent.trim() === 'EN';
+        });
+      var s = isEs ? calcStrings.es : calcStrings.en;
+
+      var titleEl = calc.querySelector('#calc-title');
+      var subtitleEl = calc.querySelector('#calc-subtitle');
+      var contractLabel = calc.querySelector('#calc-contract-label');
+      var commissionLabel = calc.querySelector('#calc-commission-label');
+      var planLabelEl = calc.querySelector('#calc-plan-label');
+      var btnEl = calc.querySelector('#calc-btn');
+      var opts = calc.querySelectorAll('#calc-plan option');
+      var tradEl = calc.querySelector('#calc-trad-label');
+      var agentosEl = calc.querySelector('#calc-agentos-label');
+      var feesEl = calc.querySelectorAll('#calc-fees-label');
+      var totalEl = calc.querySelector('#calc-total-label');
+      var saveEl = calc.querySelector('#calc-save-label');
+
+      if (titleEl) titleEl.textContent = s.title;
+      if (subtitleEl) subtitleEl.textContent = s.subtitle;
+      if (contractLabel) contractLabel.textContent = s.contract;
+      if (commissionLabel) commissionLabel.textContent = s.commission;
+      if (planLabelEl) planLabelEl.textContent = s.planLabel;
+      if (btnEl) btnEl.textContent = s.btn;
+      opts.forEach(function(opt, i) { if (s.plans[i]) opt.textContent = s.plans[i]; });
+      if (tradEl) tradEl.textContent = s.tradLabel;
+      if (agentosEl) agentosEl.textContent = s.agentosLabel;
+      if (feesEl) feesEl.forEach(function(el) { el.textContent = s.fees; });
+      if (totalEl) totalEl.textContent = s.totalCost;
+      if (saveEl) saveEl.textContent = s.youSave;
+
+      // Update % saved text if result visible
+      var pctEl = document.getElementById('calc-pct-saved');
+      if (pctEl && pctEl.textContent) {
+        var num = pctEl.textContent.match(/\d+/);
+        if (num) pctEl.textContent = num[0] + s.pctLess;
+      }
+
+      // Update Club calculator
+      var clubTitle = document.querySelector('#club-calc-section .club-title');
+      var clubSubtitle = document.querySelector('#club-calc-section .club-subtitle');
+      var f = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+      f('club-fees-label', s.clubFeesLabel);
+      f('club-transfers-label', s.clubTransfersLabel);
+      f('club-calc-btn', s.clubBtn);
+      f('club-trad-label', s.clubTradLabel);
+      f('club-agentos-result-label', s.clubAgentosLabel);
+      f('club-fees-note', s.clubFeesNote);
+      f('club-cost-note', s.clubCostNote);
+      f('club-save-label', s.clubSaveLabel);
+      f('club-footnote', s.clubFootnote);
+      f('club-howto-title', s.howToUse);
+
+      // Update how-to list
+      var howToList = document.querySelectorAll('#club-calc-section ol li');
+      howToList.forEach(function(li, i) { if (s.howTo[i]) li.textContent = s.howTo[i]; });
+
+      // Update club pct saved if visible
+      var clubPctEl = document.getElementById('club-pct-saved');
+      if (clubPctEl && clubPctEl.textContent) {
+        var n2 = clubPctEl.textContent.match(/\d+/);
+        if (n2) clubPctEl.textContent = n2[0] + s.clubPctLess;
+      }
+    }
+
+    // Pricing feature translations EN→ES
+    var featureTranslations = {
+      // Trust Plan
+      'AI Agent Advisor: Bernie Brooks or Tania Freeman': 'Agente IA: Bernie Brooks o Tania Freeman',
+      'AI Technical Support: Dante K (24/7 availability)': 'Soporte Técnico IA: Dante K (disponibilidad 24/7)',
+      '1,000,000 Opus Credits/month': '1.000.000 Créditos Opus/mes',
+      'Military-grade encrypted communications & secure document vault': 'Comunicaciones cifradas y cámara de documentos segura',
+      'Market Valuation Dashboard — real-time comparable deals': 'Dashboard de Valoración de Mercado — operaciones comparables en tiempo real',
+      'FIFA-compliant Contract Template Library': 'Biblioteca de Plantillas de Contratos conforme a la FIFA',
+      'Performance Analytics & 5-year career projections': 'Analítica de Rendimiento y proyecciones de carrera a 5 años',
+      'Transfer Market Intelligence — 1,200+ league database': 'Inteligencia del Mercado de Traspasos — base de datos de 1.200+ ligas',
+      'Multi-Language: Spanish, English, Portuguese': 'Multilingüe: Español, Inglés, Portugués',
+      // Full Agency
+      'Everything in Trust Plan plus:': 'Todo el Plan Trust más:',
+      'AI Sports Medicine: Dr. Dani Eastwood': 'Medicina Deportiva IA: Dra. Dani Eastwood',
+      'AI Sports Nutrition: Maya Brioni': 'Nutrición Deportiva IA: Maya Brioni',
+      'AI Sports Psychology: Maty Bianco': 'Psicología Deportiva IA: Maty Bianco',
+      'AI Chief of Staff: Amaya Sinclair': 'Directora de Gabinete IA: Amaya Sinclair',
+      'AI Chief Investment Officer: Henry Blackwell': 'Director de Inversiones IA: Henry Blackwell',
+      'AI Chief Financial Officer: Marcus Webb': 'Director Financiero IA: Marcus Webb',
+      'Top Attorney: Full contract review & legal documentation': 'Abogado de Primer Nivel: Revisión completa de contratos y documentación legal',
+      'FIFA-Certified Agent: Personal representation for negotiations': 'Agente Certificado FIFA: Representación personal en negociaciones',
+      '3,000,000 Opus Credits/month (3× Trust Plan)': '3.000.000 Créditos Opus/mes (3× Plan Trust)',
+      'Three-language setup — custom languages available': 'Configuración en tres idiomas — idiomas personalizados disponibles',
+      'Priority dedicated response times': 'Tiempos de respuesta dedicados y prioritarios',
+      // Talents
+      'AI Talent Agent: Trina Pia or Charlie Nens': 'Agente de Talentos IA: Trina Pia o Charlie Nens',
+      'Brand partnership matching & deal intelligence': 'Emparejamiento con marcas e inteligencia de acuerdos',
+      'Transparent sponsorship valuation — no inflated commissions': 'Valoración de patrocinio transparente — sin comisiones infladas',
+      'Secure document vault & encrypted communications': 'Cámara de documentos segura y comunicaciones cifradas',
+      // Clubs
+      'Sporting Director AI: Enzo Rubio': 'Director Deportivo IA: Enzo Rubio',
+      '1,200+ league scouting database access': 'Acceso a base de datos de scouting de 1.200+ ligas',
+      'Transfer market intelligence & fair market valuations': 'Inteligencia del mercado de traspasos y valoraciones justas de mercado',
+      'Recruitment cost optimization — average 87% savings': 'Optimización de costes de contratación — ahorro medio del 87%',
+      'FIFA-compliant transfer documentation': 'Documentación de traspasos conforme a la FIFA',
+      'Secure vault for contracts & sensitive materials': 'Cámara segura para contratos y materiales sensibles',
+      // Brands
+      'Brand Manager AI: Peter Wilson or Lisa Penn': 'Director de Marca IA: Peter Wilson o Lisa Penn',
+      'Verified talent reach metrics & audience data': 'Métricas de alcance de talento verificadas y datos de audiencia',
+      'Transparent sponsorship pricing — no inflation': 'Precios de patrocinio transparentes — sin inflación',
+      'Campaign analytics & ROI optimization': 'Analítica de campañas y optimización del ROI',
+      'Talent-brand matchmaking intelligence': 'Inteligencia de emparejamiento talento-marca',
+      // Pricing card labels
+      'Setup fee': 'Cuota de configuración',
+      'No transaction fee': 'Sin comisión por operación',
+      'I agree to the': 'Acepto los',
+      'and the': 'y el',
+      'Terms & Conditions': 'Términos y Condiciones',
+      'Master Service Agreement': 'Acuerdo Marco de Servicios'
+    };
+
+    // Feature translations for all languages
+    var featureTranslationsAll = {
+      es: featureTranslations,
+      pt: {
+        'AI Agent Advisor: Bernie Brooks or Tania Freeman': 'Agente IA: Bernie Brooks ou Tania Freeman',
+        'AI Technical Support: Dante K (24/7 availability)': 'Suporte Técnico IA: Dante K (disponibilidade 24/7)',
+        '1,000,000 Opus Credits/month': '1.000.000 Créditos Opus/mês',
+        'Military-grade encrypted communications & secure document vault': 'Comunicações criptografadas e cofre de documentos seguro',
+        'Market Valuation Dashboard — real-time comparable deals': 'Dashboard de Avaliação de Mercado — negócios comparáveis em tempo real',
+        'FIFA-compliant Contract Template Library': 'Biblioteca de Modelos de Contratos em conformidade com a FIFA',
+        'Performance Analytics & 5-year career projections': 'Análise de Desempenho e projeções de carreira de 5 anos',
+        'Transfer Market Intelligence — 1,200+ league database': 'Inteligência do Mercado de Transferências — base de dados de 1.200+ ligas',
+        'Multi-Language: Spanish, English, Portuguese': 'Multilíngue: Espanhol, Inglês, Português',
+        'Everything in Trust Plan plus:': 'Tudo do Plano Trust mais:',
+        'AI Sports Medicine: Dr. Dani Eastwood': 'Medicina Esportiva IA: Dra. Dani Eastwood',
+        'AI Sports Nutrition: Maya Brioni': 'Nutrição Esportiva IA: Maya Brioni',
+        'AI Sports Psychology: Maty Bianco': 'Psicologia Esportiva IA: Maty Bianco',
+        'AI Chief of Staff: Amaya Sinclair': 'Diretora de Gabinete IA: Amaya Sinclair',
+        'AI Chief Investment Officer: Henry Blackwell': 'Diretor de Investimentos IA: Henry Blackwell',
+        'AI Chief Financial Officer: Marcus Webb': 'Diretor Financeiro IA: Marcus Webb',
+        'Top Attorney: Full contract review & legal documentation': 'Advogado de Alto Nível: Revisão completa de contratos e documentação legal',
+        'FIFA-Certified Agent: Personal representation for negotiations': 'Agente Certificado FIFA: Representação pessoal em negociações',
+        '3,000,000 Opus Credits/month (3× Trust Plan)': '3.000.000 Créditos Opus/mês (3× Plano Trust)',
+        'Three-language setup — custom languages available': 'Configuração em três idiomas — idiomas personalizados disponíveis',
+        'Priority dedicated response times': 'Tempos de resposta dedicados e prioritários',
+        'AI Talent Agent: Trina Pia or Charlie Nens': 'Agente de Talentos IA: Trina Pia ou Charlie Nens',
+        'Brand partnership matching & deal intelligence': 'Correspondência com marcas e inteligência de negócios',
+        'Transparent sponsorship valuation — no inflated commissions': 'Avaliação de patrocínio transparente — sem comissões infladas',
+        'Secure document vault & encrypted communications': 'Cofre de documentos seguro e comunicações criptografadas',
+        'Sporting Director AI: Enzo Rubio': 'Diretor Esportivo IA: Enzo Rubio',
+        '1,200+ league scouting database access': 'Acesso à base de dados de scouting de 1.200+ ligas',
+        'Transfer market intelligence & fair market valuations': 'Inteligência do mercado de transferências e avaliações justas',
+        'Recruitment cost optimization — average 87% savings': 'Otimização de custos de recrutamento — economia média de 87%',
+        'FIFA-compliant transfer documentation': 'Documentação de transferências em conformidade com a FIFA',
+        'Secure vault for contracts & sensitive materials': 'Cofre seguro para contratos e materiais sensíveis',
+        'Brand Manager AI: Peter Wilson or Lisa Penn': 'Gerente de Marca IA: Peter Wilson ou Lisa Penn',
+        'Verified talent reach metrics & audience data': 'Métricas de alcance de talentos verificadas e dados de audiência',
+        'Transparent sponsorship pricing — no inflation': 'Preços de patrocínio transparentes — sem inflação',
+        'Campaign analytics & ROI optimization': 'Análise de campanhas e otimização de ROI',
+        'Talent-brand matchmaking intelligence': 'Inteligência de correspondência talento-marca'
+      },
+      fr: {
+        'AI Agent Advisor: Bernie Brooks or Tania Freeman': 'Agent IA: Bernie Brooks ou Tania Freeman',
+        'AI Technical Support: Dante K (24/7 availability)': 'Support Technique IA: Dante K (disponibilité 24/7)',
+        '1,000,000 Opus Credits/month': '1 000 000 Crédits Opus/mois',
+        'Military-grade encrypted communications & secure document vault': 'Communications chiffrées et coffre-fort de documents sécurisé',
+        'Market Valuation Dashboard — real-time comparable deals': 'Tableau de Bord des Valorisations — transactions comparables en temps réel',
+        'FIFA-compliant Contract Template Library': 'Bibliothèque de Modèles de Contrats conformes à la FIFA',
+        'Performance Analytics & 5-year career projections': 'Analytique de Performance et projections de carrière sur 5 ans',
+        'Transfer Market Intelligence — 1,200+ league database': 'Intelligence du Marché des Transferts — base de données de 1 200+ ligues',
+        'Multi-Language: Spanish, English, Portuguese': 'Multilingue: Espagnol, Anglais, Portugais',
+        'Everything in Trust Plan plus:': 'Tout du Plan Trust plus:',
+        'AI Sports Medicine: Dr. Dani Eastwood': 'Médecine Sportive IA: Dr. Dani Eastwood',
+        'AI Sports Nutrition: Maya Brioni': 'Nutrition Sportive IA: Maya Brioni',
+        'AI Sports Psychology: Maty Bianco': 'Psychologie Sportive IA: Maty Bianco',
+        'AI Chief of Staff: Amaya Sinclair': 'Directrice de Cabinet IA: Amaya Sinclair',
+        'AI Chief Investment Officer: Henry Blackwell': 'Directeur des Investissements IA: Henry Blackwell',
+        'AI Chief Financial Officer: Marcus Webb': 'Directeur Financier IA: Marcus Webb',
+        'Top Attorney: Full contract review & legal documentation': 'Avocat de Premier Plan: Révision complète des contrats et documentation juridique',
+        'FIFA-Certified Agent: Personal representation for negotiations': 'Agent Certifié FIFA: Représentation personnelle pour les négociations',
+        '3,000,000 Opus Credits/month (3× Trust Plan)': '3 000 000 Crédits Opus/mois (3× Plan Trust)',
+        'Three-language setup — custom languages available': 'Configuration en trois langues — langues personnalisées disponibles',
+        'Priority dedicated response times': 'Temps de réponse dédiés et prioritaires',
+        'AI Talent Agent: Trina Pia or Charlie Nens': 'Agent de Talents IA: Trina Pia ou Charlie Nens',
+        'Brand partnership matching & deal intelligence': 'Correspondance de partenariats de marque et intelligence des deals',
+        'Transparent sponsorship valuation — no inflated commissions': 'Valorisation transparente du sponsoring — sans commissions gonflées',
+        'Secure document vault & encrypted communications': 'Coffre-fort de documents sécurisé et communications chiffrées',
+        'Sporting Director AI: Enzo Rubio': 'Directeur Sportif IA: Enzo Rubio',
+        '1,200+ league scouting database access': 'Accès à la base de données de scouting de 1 200+ ligues',
+        'Transfer market intelligence & fair market valuations': 'Intelligence du marché des transferts et valorisations équitables',
+        'Recruitment cost optimization — average 87% savings': 'Optimisation des coûts de recrutement — économies moyennes de 87%',
+        'FIFA-compliant transfer documentation': 'Documentation de transferts conforme à la FIFA',
+        'Secure vault for contracts & sensitive materials': 'Coffre sécurisé pour contrats et matériaux sensibles',
+        'Brand Manager AI: Peter Wilson or Lisa Penn': 'Directeur de Marque IA: Peter Wilson ou Lisa Penn',
+        'Verified talent reach metrics & audience data': 'Métriques de portée des talents vérifiées et données d\'audience',
+        'Transparent sponsorship pricing — no inflation': 'Tarification transparente du sponsoring — sans inflation',
+        'Campaign analytics & ROI optimization': 'Analytique de campagnes et optimisation du ROI',
+        'Talent-brand matchmaking intelligence': 'Intelligence de correspondance talent-marque'
+      },
+      de: {
+        'AI Agent Advisor: Bernie Brooks or Tania Freeman': 'KI-Agent: Bernie Brooks oder Tania Freeman',
+        'AI Technical Support: Dante K (24/7 availability)': 'KI-Technischer Support: Dante K (24/7 verfügbar)',
+        '1,000,000 Opus Credits/month': '1.000.000 Opus Credits/Monat',
+        'Military-grade encrypted communications & secure document vault': 'Verschlüsselte Kommunikation und sicherer Dokumententresor',
+        'Market Valuation Dashboard — real-time comparable deals': 'Marktbewertungs-Dashboard — vergleichbare Deals in Echtzeit',
+        'FIFA-compliant Contract Template Library': 'FIFA-konforme Vertragsvorlagenbibliothek',
+        'Performance Analytics & 5-year career projections': 'Leistungsanalytik und 5-Jahres-Karriereprojektionen',
+        'Transfer Market Intelligence — 1,200+ league database': 'Transfermarkt-Intelligenz — Datenbank mit 1.200+ Ligen',
+        'Multi-Language: Spanish, English, Portuguese': 'Mehrsprachig: Spanisch, Englisch, Portugiesisch',
+        'Everything in Trust Plan plus:': 'Alles im Trust Plan plus:',
+        'AI Sports Medicine: Dr. Dani Eastwood': 'KI-Sportmedizin: Dr. Dani Eastwood',
+        'AI Sports Nutrition: Maya Brioni': 'KI-Sporternährung: Maya Brioni',
+        'AI Sports Psychology: Maty Bianco': 'KI-Sportpsychologie: Maty Bianco',
+        'AI Chief of Staff: Amaya Sinclair': 'KI-Stabschefin: Amaya Sinclair',
+        'AI Chief Investment Officer: Henry Blackwell': 'KI-Investmentdirektor: Henry Blackwell',
+        'AI Chief Financial Officer: Marcus Webb': 'KI-Finanzdirektor: Marcus Webb',
+        'Top Attorney: Full contract review & legal documentation': 'Topanwalt: Vollständige Vertragsprüfung und rechtliche Dokumentation',
+        'FIFA-Certified Agent: Personal representation for negotiations': 'FIFA-zertifizierter Agent: Persönliche Vertretung bei Verhandlungen',
+        '3,000,000 Opus Credits/month (3× Trust Plan)': '3.000.000 Opus Credits/Monat (3× Trust Plan)',
+        'Three-language setup — custom languages available': 'Dreisprachige Einrichtung — benutzerdefinierte Sprachen verfügbar',
+        'Priority dedicated response times': 'Prioritäre dedizierte Reaktionszeiten',
+        'AI Talent Agent: Trina Pia or Charlie Nens': 'KI-Talentagent: Trina Pia oder Charlie Nens',
+        'Brand partnership matching & deal intelligence': 'Markenpartnerschafts-Matching und Deal-Intelligenz',
+        'Transparent sponsorship valuation — no inflated commissions': 'Transparente Sponsoring-Bewertung — keine aufgeblähten Provisionen',
+        'Secure document vault & encrypted communications': 'Sicherer Dokumententresor und verschlüsselte Kommunikation',
+        'Sporting Director AI: Enzo Rubio': 'KI-Sportdirektor: Enzo Rubio',
+        '1,200+ league scouting database access': 'Zugang zur Scouting-Datenbank mit 1.200+ Ligen',
+        'Transfer market intelligence & fair market valuations': 'Transfermarkt-Intelligenz und faire Marktbewertungen',
+        'Recruitment cost optimization — average 87% savings': 'Rekrutierungskostenoptimierung — durchschnittlich 87% Ersparnis',
+        'FIFA-compliant transfer documentation': 'FIFA-konforme Transferdokumentation',
+        'Secure vault for contracts & sensitive materials': 'Sicherer Tresor für Verträge und sensible Materialien',
+        'Brand Manager AI: Peter Wilson or Lisa Penn': 'KI-Markenmanager: Peter Wilson oder Lisa Penn',
+        'Verified talent reach metrics & audience data': 'Verifizierte Talent-Reichweitenmetriken und Zielgruppendaten',
+        'Transparent sponsorship pricing — no inflation': 'Transparente Sponsoring-Preisgestaltung — keine Inflation',
+        'Campaign analytics & ROI optimization': 'Kampagnenanalytik und ROI-Optimierung',
+        'Talent-brand matchmaking intelligence': 'Talent-Marken-Matching-Intelligenz'
+      }
+    };
+
+    function applyPricingTranslations(lang) {
+      var pricing = document.getElementById('pricing');
+      if (!pricing) return;
+
+      // Build reverse map from all languages back to EN
+      var reverseMap = {};
+      Object.keys(featureTranslationsAll).forEach(function(l) {
+        Object.keys(featureTranslationsAll[l]).forEach(function(enKey) {
+          reverseMap[featureTranslationsAll[l][enKey]] = enKey;
+        });
+      });
+
+      // First restore EN text
+      pricing.querySelectorAll('li, span, p, div').forEach(function(el) {
+        if (el.children.length === 0) {
+          var txt = el.textContent.trim();
+          if (reverseMap[txt]) el.textContent = reverseMap[txt];
+        }
+      });
+
+      // Then apply target language
+      if (lang !== 'en' && featureTranslationsAll[lang]) {
+        var map = featureTranslationsAll[lang];
+        pricing.querySelectorAll('li, span, p, div').forEach(function(el) {
+          if (el.children.length === 0) {
+            var txt = el.textContent.trim();
+            if (map[txt]) el.textContent = map[txt];
+          }
+        });
+      }
+    }
+
+    window.updateCalcLangForLang = function(lang) {
+      // Calc strings - extend for pt/fr/de with fallback to EN
+      var extraStrings = {
+        pt: { title:'Calculadora de Economia Jogador & Clube', subtitle:'com AgentOS', contract:'Valor do Contrato', commission:'Comissão do Agente Tradicional', planLabel:'Plano AgentOS', btn:'Calcular Minha Economia →', plans:['Plano Trust Jogador — $2.500/mês · Sem taxa por negócio','Plano Full Agency Jogador — $6.500/mês · 2% por negócio','Plano Clube — $6.500/mês · 2% por negócio'], tradLabel:'Agente Tradicional', agentosLabel:'AgentOS 24/7', fees:'em honorários', totalCost:'custo total', youSave:'Você Economiza', pctLess:'% menos que um agente tradicional' },
+        fr: { title:'Calculateur d\'Économies Joueur & Club', subtitle:'avec AgentOS', contract:'Valeur du Contrat', commission:'Commission de l\'Agent Traditionnel', planLabel:'Plan AgentOS', btn:'Calculer mes Économies →', plans:['Plan Trust Joueur — 2 500$/mois · Sans frais de deal','Plan Full Agency Joueur — 6 500$/mois · 2% par deal','Plan Club — 6 500$/mois · 2% par deal'], tradLabel:'Agent Traditionnel', agentosLabel:'AgentOS 24/7', fees:'en honoraires', totalCost:'coût total', youSave:'Vous Économisez', pctLess:'% moins qu\'un agent traditionnel' },
+        de: { title:'Ersparnisrechner Spieler & Verein', subtitle:'mit AgentOS', contract:'Vertragswert', commission:'Provision des Traditionellen Agenten', planLabel:'AgentOS Plan', btn:'Meine Ersparnisse Berechnen →', plans:['Spieler Trust Plan — $2.500/Monat · Keine Deal-Gebühr','Spieler Full Agency Plan — $6.500/Monat · 2% Deal-Gebühr','Vereinsplan — $6.500/Monat · 2% Deal-Gebühr'], tradLabel:'Traditioneller Agent', agentosLabel:'AgentOS 24/7', fees:'an Gebühren', totalCost:'Gesamtkosten', youSave:'Sie Sparen', pctLess:'% weniger als ein traditioneller Agent' }
+      };
+      if (lang === 'es') { updateCalcLang(); return; }
+      if (!extraStrings[lang]) { updateCalcLang(); return; } // fallback to EN via reset
+      var s = extraStrings[lang];
+      var f = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+      f('calc-title', s.title);
+      f('calc-subtitle', s.subtitle);
+      f('calc-contract-label', s.contract);
+      f('calc-commission-label', s.commission);
+      f('calc-plan-label', s.planLabel);
+      f('calc-btn', s.btn);
+      var opts = document.querySelectorAll('#calc-plan option');
+      opts.forEach(function(opt, i) { if (s.plans[i]) opt.textContent = s.plans[i]; });
+      f('calc-trad-label', s.tradLabel);
+      f('calc-agentos-label', s.agentosLabel);
+      document.querySelectorAll('#calc-fees-label').forEach(function(el){ el.textContent = s.fees; });
+      f('calc-total-label', s.totalCost);
+      f('calc-save-label', s.youSave);
+    };
+
+    // Watch for language button clicks
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('button');
+      if (btn && (btn.textContent.trim() === 'ES' || btn.textContent.trim() === 'EN')) {
+        setTimeout(function() {
+          var isEs = Array.from(document.querySelectorAll('button')).some(function(b) { return b.textContent.trim() === 'EN'; });
+          var lang = isEs ? 'es' : 'en';
+          updateCalcLang();
+          renderAgentTasks(lang);
+          applyPricingTranslations(lang);
+        }, 150);
+      }
+    });
+
+    // Currency state
+    var calcCurrency = '€';
+    var clubCurrency = '€';
+
+    function fmtNum(n, sym) {
+      return sym + Math.round(n).toLocaleString('en-US');
+    }
+
+    // Number formatting on input (add commas as user types)
+    function addCommaFormatting(inputId) {
+      var el = document.getElementById(inputId);
+      if (!el) return;
+      el.addEventListener('input', function() {
+        var raw = this.value.replace(/,/g, '');
+        if (!isNaN(raw) && raw !== '') {
+          this.value = Number(raw).toLocaleString('en-US');
+        }
+      });
+    }
+
+    function getRawValue(inputId) {
+      var el = document.getElementById(inputId);
+      if (!el) return 0;
+      return parseFloat(el.value.replace(/,/g, '')) || 0;
+    }
+
+    window.setCalcCurrency = function(sym) {
+      calcCurrency = sym;
+      ['eur','gbp','usd'].forEach(function(c) {
+        var btn = document.getElementById('calc-cur-'+c);
+        if (btn) { btn.style.background = 'transparent'; btn.style.color = '#6b7280'; }
+      });
+      var map = {'€':'eur','£':'gbp','$':'usd'};
+      var active = document.getElementById('calc-cur-'+map[sym]);
+      if (active) { active.style.background = '#0057ff'; active.style.color = '#fff'; }
+      var symEl = document.getElementById('calc-cur-sym');
+      if (symEl) symEl.textContent = sym;
+    };
+
+    window.setClubCurrency = function(sym) {
+      clubCurrency = sym;
+      ['eur','gbp','usd'].forEach(function(c) {
+        var btn = document.getElementById('club-cur-'+c);
+        if (btn) { btn.style.background = 'transparent'; btn.style.color = '#6b7280'; }
+      });
+      var map = {'€':'eur','£':'gbp','$':'usd'};
+      var active = document.getElementById('club-cur-'+map[sym]);
+      if (active) { active.style.background = '#0057ff'; active.style.color = '#fff'; }
+      ['club-cur-sym-fees','club-cur-sym-transfers'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = sym;
+      });
+    };
+
+    // Init formatting on inputs after injection
+    var calcFormattingInit = false;
+    function initFormatting() {
+      if (calcFormattingInit) return;
+      if (!document.getElementById('calc-contract')) { setTimeout(initFormatting, 400); return; }
+      calcFormattingInit = true;
+      addCommaFormatting('calc-contract');
+      addCommaFormatting('club-fees');
+      addCommaFormatting('club-transfers');
+    }
+    setTimeout(initFormatting, 800);
+
+    window.calcSavings = function() {
+      var contract = getRawValue('calc-contract');
+      var pct = parseFloat(document.getElementById('calc-pct').value) || 0;
+      var plan = document.getElementById('calc-plan').value;
+
+      if (!contract || !pct) return;
+
+      var traditional = contract * (pct / 100);
+
+      // Plan costs (annual subscription + tx fee on this deal)
+      var annualSub = plan === "trust" ? 30000 : 78000;
+      var txFee = plan === "trust" ? 0 : plan === "clubs" ? contract * 0.02 : contract * 0.02;
+      var agentOS = annualSub + txFee;
+
+      var saved = traditional - agentOS;
+      var pctSaved = ((saved / traditional) * 100).toFixed(0);
+
+      function fmt(n) {
+        return '€' + Math.round(n).toLocaleString('en-EU');
+      }
+
+      document.getElementById('calc-traditional').textContent = fmt(traditional);
+      document.getElementById('calc-agentos').textContent = fmt(agentOS);
+      document.getElementById('calc-savings').textContent = saved > 0 ? fmt(saved) : '€0';
+      document.getElementById('calc-pct-saved').textContent = saved > 0
+        ? pctSaved + '% less than a traditional agent'
+        : 'AgentOS is more cost-effective on larger deals';
+
+      document.getElementById('calc-result').style.display = 'block';
+    };
+
+    // Inject "What Your Agents Do" section after #pricing
+    function injectAgentTasks() {
+      var pricing = document.getElementById('pricing');
+      if (!pricing) { setTimeout(injectAgentTasks, 400); return; }
+      if (document.getElementById('agent-tasks-section')) return;
+
+      var section = document.createElement('section');
+      section.id = 'agent-tasks-section';
+      section.style.cssText = 'padding:96px 0;border-bottom:1px solid #e5e7eb;background:#f8faff;';
+      section.innerHTML = `
+        <div style="max-width:1200px;margin:0 auto;padding:0 6%;">
+          <div style="margin-bottom:52px;">
+            <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#9ca3af;display:flex;align-items:center;gap:10px;margin-bottom:22px;">
+              Agent Capabilities <span style="display:inline-block;width:32px;height:1px;background:#e5e7eb;"></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:end;">
+              <h2 style="font-family:inherit;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.07;letter-spacing:-0.04em;margin:0;">
+                What Your<br><span style="font-weight:300;color:#6b7280;">AI Team Does</span>
+              </h2>
+              <p style="font-size:0.975rem;color:#6b7280;line-height:1.75;font-weight:300;margin:0;">
+                Every agent in your plan has a defined set of tasks they execute on your behalf — 24 hours a day, 7 days a week. Here's exactly what each one does.
+              </p>
+            </div>
+          </div>
+
+          <!-- Plan tabs -->
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:36px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:5px;width:fit-content;">
+            <button onclick="showPlan('players')" id="tab-players" style="padding:9px 20px;border-radius:8px;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;background:#0057ff;color:#fff;">Players & Coaches</button>
+            <button onclick="showPlan('talents')" id="tab-talents" style="padding:9px 20px;border-radius:8px;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;">Talents</button>
+            <button onclick="showPlan('clubs')" id="tab-clubs" style="padding:9px 20px;border-radius:8px;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;">Clubs</button>
+            <button onclick="showPlan('brands')" id="tab-brands" style="padding:9px 20px;border-radius:8px;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;">Brands</button>
+          </div>
+
+          <!-- Players & Coaches -->
+          <div id="plan-players" style="display:block;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">
+              ${agentCard('dante-k-C9-79MAO.png','Dante K.','Technical Support','#6366f1',[
+                'Onboard and configure your entire agent team',
+                'Troubleshoot any technical issue 24/7',
+                'Coordinate between your AI agents',
+                'Manage system updates and new integrations',
+                'Answer questions about your plan and billing'
+              ])}
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:28px;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">
+                  <div style="display:flex;gap:-8px;">
+                    <img src="/assets/bernie-brooks-CcZjk6hi.png" alt="Bernie Brooks" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
+                    <img src="/assets/tania-freeman-DOFELQSK.png" alt="Tania Freeman" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;margin-left:-12px;"/>
+                  </div>
+                  <div>
+                    <h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">Bernie Brooks or Tania Freeman</h4>
+                    <span style="font-size:0.75rem;color:#0057ff;font-weight:600;">Your AI Agent — Trust Plan</span>
+                  </div>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;">
+                  ${['Negotiate transfers and contracts on your behalf','Review and flag unfair contract clauses','Provide real-time market valuations for your deal','Compare your offer to 1,200+ leagues\' comparable deals','Communicate with clubs, directors and intermediaries','Prepare FIFA-compliant transfer documentation','Benchmark your salary against comparable roles globally','Advise on club stability and sporting project fit','Track your contract expiry and renewal windows'].map(function(t){return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#0057ff;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';}).join('')}
+                </ul>
+              </div>
+              ${agentCard('amaya-sinclair-D64ReIsy.png','Amaya Sinclair','AI Chief of Staff — Full Agency','#7c3aed',[
+                'Coordinate across your entire AI executive team',
+                'Manage your calendar — meetings, training, media, travel',
+                'Set up and confirm appointments with clubs, agents, and advisors',
+                'Handle inbound and outbound calls with number integration',
+                'Prepare strategic briefings before key negotiations',
+                'Track all your open deals, renewals, and deadlines in one place',
+                'Flag conflicts or bottlenecks across your agent team',
+                'Manage communication between your club, agents, and advisors',
+                'Align your career objectives with day-to-day AI operations',
+                'Deliver weekly executive summaries of your career status',
+                'And much more — your 24/7 executive operations layer'
+              ])}
+              ${agentCard('henry-blackwell-BKwx9mQp.jpg','Henry Blackwell','AI Chief Investment Officer — Full Agency','#7c3aed',[
+                'Analyse the financial upside of every contract before you sign',
+                'Model your career earnings across different deal scenarios',
+                'Advise on image rights, bonuses, and performance clauses',
+                'Identify investment and wealth-building opportunities',
+                'Assess the financial stability of clubs making you offers',
+                'Monitor your market value — and when it\'s peaking',
+                'Advise on tax-efficient contract structuring by country'
+              ])}
+              ${agentCard('marcus-webb-D2g7uHV9.png','Marcus Webb','AI Chief Financial Officer — Full Agency','#7c3aed',[
+                'Oversee your full financial picture — salary, bonuses, rights',
+                'Review contract financial terms for hidden risks',
+                'Model FFP impact when clubs claim budget constraints',
+                'Flag clauses that cut your pay in relegation or injury scenarios',
+                'Advise on currency, payment schedules, and guarantees',
+                'Prepare financial summaries for your legal or tax advisors',
+                'Monitor whether clubs can actually afford to pay what they promise'
+              ])}
+              <div style="background:#fff;border:1px solid #e0d4ff;border-radius:14px;padding:28px;grid-column:span 1;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">
+                  <div style="display:flex;align-items:center;gap:14px;">
+                    <img src="/assets/dani-eastwood-B1gBcZu5.jpg" alt="Dr. Dani Eastwood" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
+                    <div>
+                      <h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">Dr. Dani Eastwood</h4>
+                      <span style="font-size:0.75rem;color:#7c3aed;font-weight:600;">Chief Medical Officer — Full Agency</span>
+                    </div>
+                  </div>
+                  <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:#f3e8ff;color:#7c3aed;padding:4px 10px;border-radius:20px;white-space:nowrap;">C-Level AI</span>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;">
+                  ${['Design personalized injury prevention protocols for players','Review medical reports and advise on treatment plans','Audit club medical departments and flag systemic risks','Monitor squad-wide injury loads and return-to-play readiness','Flag high-risk training volumes before injuries occur','Provide second opinions on surgical recommendations','Advise agents on injury clauses in contract negotiations','Track long-term physical trends across the full squad'].map(function(t){return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#7c3aed;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';}).join('')}
+                </ul>
+              </div>
+              <div style="background:#fff;border:1px solid #e0d4ff;border-radius:14px;padding:28px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">
+                  <div style="display:flex;align-items:center;gap:14px;">
+                    <img src="/assets/maya-brioni-CvJRpM3R.jpg" alt="Maya Brioni" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
+                    <div>
+                      <h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">Maya Brioni</h4>
+                      <span style="font-size:0.75rem;color:#7c3aed;font-weight:600;">Chief Nutrition Officer — Full Agency</span>
+                    </div>
+                  </div>
+                  <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:#f3e8ff;color:#7c3aed;padding:4px 10px;border-radius:20px;white-space:nowrap;">C-Level AI</span>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;">
+                  ${['Build personalized nutrition plans by season phase','Optimize body composition for peak performance','Design match-day and recovery nutrition protocols','Audit squad-wide nutrition practices for clubs','Align club canteen and travel catering with performance goals','Adjust plans based on training load, travel, and climate','Advise agents on nutrition-related fitness clauses in contracts','Flag nutritional deficiencies before they impact performance'].map(function(t){return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#7c3aed;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';}).join('')}
+                </ul>
+              </div>
+              <div style="background:#fff;border:1px solid #e0d4ff;border-radius:14px;padding:28px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">
+                  <div style="display:flex;align-items:center;gap:14px;">
+                    <img src="/assets/maty-bianco-DA3fcDsv.jpg" alt="Maty Bianco" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
+                    <div>
+                      <h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">Maty Bianco</h4>
+                      <span style="font-size:0.75rem;color:#7c3aed;font-weight:600;">Chief Psychology Officer — Full Agency</span>
+                    </div>
+                  </div>
+                  <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:#f3e8ff;color:#7c3aed;padding:4px 10px;border-radius:20px;white-space:nowrap;">C-Level AI</span>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;">
+                  ${['Build mental resilience and focus programs for players','Support high-pressure moments: transfers, negotiations, finals','Coach clubs on building a high-performance squad culture','Advise on player mental readiness during contract disputes','Manage performance anxiety and slump recovery for individuals','Assess team dynamics and flag toxic culture patterns','Work through contract uncertainty and career transitions','Advise agents on psychological impact of deal timelines'].map(function(t){return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:#7c3aed;font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';}).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Talents -->
+          <div id="plan-talents" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">
+              ${agentCard('dante-k-C9-79MAO.png','Dante K.','Technical Support','#6366f1',[
+                'Onboard and configure your agent team',
+                'Troubleshoot any technical issue 24/7',
+                'Manage integrations and system updates',
+                'Answer questions about your plan and billing'
+              ])}
+              ${agentCard('trina-pia-Bhzuoinu.png','Trina Pia','Talent Agent — Entertainment & Influencer','#0057ff',[
+                'Match you with verified brand partnership opportunities',
+                'Value your sponsorship based on real audience data',
+                'Review brand deal contracts for unfair clauses',
+                'Negotiate terms — no conflict of interest, ever',
+                'Track comparable deals in your market segment',
+                'Manage your deal pipeline and follow-ups',
+                'Provide ROI reporting for brands you partner with'
+              ])}
+              ${agentCard('charlie-nens-CjJU06NY.png','Charlie Nens','Talent Agent — Sports & Lifestyle','#0057ff',[
+                'Connect athletes and sports influencers with sponsors',
+                'Verify audience reach — no inflated metrics',
+                'Structure endorsement deals transparently',
+                'Benchmark your market value against comparable talent',
+                'Review brand alignment and reputational fit',
+                'Manage contract timelines and renewal alerts',
+                'Prepare deal documentation and summaries'
+              ])}
+            </div>
+          </div>
+
+          <!-- Clubs -->
+          <div id="plan-clubs" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">
+              ${agentCard('dante-k-C9-79MAO.png','Dante K.','Technical Support','#6366f1',[
+                'Onboard and configure your agent team',
+                'Troubleshoot any technical issue 24/7',
+                'Manage integrations and system updates'
+              ])}
+              ${agentCard('dani-eastwood-B1gBcZu5.jpg','Dr. Dani Eastwood','Chief Medical Officer — Full Agency','#7c3aed',[
+                'Audit club medical department practices and protocols',
+                'Monitor squad injury loads and flag systemic risks',
+                'Advise on medical clauses in player contracts',
+                'Track return-to-play timelines across the full squad',
+                'Provide second opinions on surgical decisions',
+                'Design club-wide injury prevention frameworks'
+              ])}
+              ${agentCard('maya-brioni-CvJRpM3R.jpg','Maya Brioni','Chief Nutrition Officer — Full Agency','#7c3aed',[
+                'Audit club nutrition programs and catering standards',
+                'Align squad-wide nutrition with performance calendar',
+                'Design travel and away-match nutrition protocols',
+                'Flag deficiencies affecting squad performance',
+                'Advise on nutrition clauses in player fitness contracts'
+              ])}
+              ${agentCard('maty-bianco-DA3fcDsv.jpg','Maty Bianco','Chief Psychology Officer — Full Agency','#7c3aed',[
+                'Assess squad team dynamics and culture health',
+                'Coach leadership on building high-performance environments',
+                'Flag toxic culture patterns before they damage results',
+                'Advise on managing player mental health during transfers',
+                'Support coaching staff through high-pressure periods'
+              ])}
+              ${agentCard('amaya-sinclair-D64ReIsy.png','Amaya Sinclair','AI Chief of Staff','#0057ff',[
+                'Coordinate across all AI executives and departments',
+                'Manage the club\'s calendar — board meetings, training, press, travel',
+                'Set up and confirm appointments across all departments',
+                'Handle inbound and outbound calls with number integration',
+                'Prepare board meeting briefs and executive summaries',
+                'Manage the club\'s strategic agenda and priorities',
+                'Track KPIs across sporting, medical, and commercial divisions',
+                'Align club objectives with day-to-day operations',
+                'Flag cross-department conflicts before they escalate',
+                'Manage communication flow between all stakeholders',
+                'And much more — your 24/7 executive operations layer'
+              ])}
+              ${agentCard('henry-blackwell-BKwx9mQp.jpg','Henry Blackwell','AI Chief Investment Officer','#0057ff',[
+                'Analyse player acquisition ROI before transfer decisions',
+                'Model long-term squad value and asset appreciation',
+                'Evaluate stadium and infrastructure investment opportunities',
+                'Assess financial risk of high-value signings',
+                'Monitor player asset depreciation and sell-on value',
+                'Advise on investment timing for key acquisitions',
+                'Track market trends affecting player valuations globally'
+              ])}
+              ${agentCard('marcus-webb-D2g7uHV9.png','Marcus Webb','AI Chief Financial Officer','#0057ff',[
+                'Oversee club wage bill structure and sustainability',
+                'Review contract financial terms and long-term liability',
+                'Model FFP / Financial Fair Play compliance scenarios',
+                'Advise on revenue diversification strategies',
+                'Flag financial risks in proposed transfer deals',
+                'Prepare financial summaries for board reporting',
+                'Monitor cash flow and liquidity during transfer windows'
+              ])}
+              ${agentCard('enzo-rubio-CMnamtEQ.png','Enzo Rubio','AI Sporting Director','#0057ff',[
+                'Scout players across 1,200+ leagues worldwide',
+                'Provide fair market valuations before you make an offer',
+                'Identify overpriced targets and flag inflated agent fees',
+                'Run background checks on player transfer history',
+                'Prepare FIFA-compliant transfer and contract documentation',
+                'Compare candidates across performance, age, and cost metrics',
+                'Monitor your squad contract expiry windows',
+                'Advise on sell-on clauses and buyout structures',
+                'Alert you to emerging talents before competitors',
+                'Deliver full due diligence reports on each target'
+              ])}
+            </div>
+          </div>
+
+          <!-- Brands -->
+          <div id="plan-brands" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">
+              ${agentCard('dante-k-C9-79MAO.png','Dante K.','Technical Support','#6366f1',[
+                'Onboard and configure your agent team',
+                'Troubleshoot any technical issue 24/7',
+                'Manage integrations and system updates'
+              ])}
+              ${agentCard('peter-wilson-BnpxIz94.png','Peter Wilson','Brand Manager','#0057ff',[
+                'Match your brand with verified sports and entertainment talent',
+                'Validate reach metrics — no inflated follower counts',
+                'Calculate fair sponsorship pricing based on real data',
+                'Structure deals to maximize brand ROI',
+                'Track campaign performance and deliver analytics reports',
+                'Manage talent contract timelines and renewals',
+                'Identify rising talent before market prices increase'
+              ])}
+              ${agentCard('lisa-penn-BMFeBVkD.png','Lisa Penn','Brand Strategist','#0057ff',[
+                'Align talent partnerships with brand identity and values',
+                'Design multi-channel campaign strategies',
+                'Measure audience sentiment and engagement quality',
+                'Build long-term ambassador programs',
+                'Identify mismatches that could harm brand reputation',
+                'Benchmark your sponsorship spend vs. competitors',
+                'Advise on exclusivity clauses and category protection'
+              ])}
+            </div>
+          </div>
+        </div>
+      `;
+      pricing.after(section);
+      renderAgentTasks('en');
+    }
+
+    function agentCard(img, name, role, color, tasks) {
+      var dots = tasks.map(function(t) {
+        return '<li style="display:flex;gap:10px;align-items:flex-start;font-size:0.84rem;color:#374151;line-height:1.55;margin-bottom:8px;"><span style="color:'+color+';font-weight:700;flex-shrink:0;margin-top:2px;">✓</span><span>'+t+'</span></li>';
+      }).join('');
+      var initials = name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+      var avatarHtml = '<img src="/assets/'+img+'" alt="'+name+'" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/>' +
+        '<div style="display:none;width:52px;height:52px;border-radius:12px;background:'+color+';color:#fff;font-size:1.1rem;font-weight:800;align-items:center;justify-content:center;flex-shrink:0;">'+initials+'</div>';
+      return '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:28px;">' +
+        '<div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;">' +
+          avatarHtml +
+          '<div>' +
+            '<h4 style="font-size:0.95rem;font-weight:700;color:#0a0a0a;margin:0 0 3px;">'+name+'</h4>' +
+            '<span style="font-size:0.75rem;color:'+color+';font-weight:600;">'+role+'</span>' +
+          '</div>' +
+        '</div>' +
+        '<ul style="list-style:none;margin:0;padding:0;">'+dots+'</ul>' +
+      '</div>';
+    }
+
+    window.showPlan = function(plan) {
+      ['players','talents','clubs','brands'].forEach(function(p) {
+        document.getElementById('plan-'+p).style.display = p === plan ? 'block' : 'none';
+        var tab = document.getElementById('tab-'+p);
+        tab.style.background = p === plan ? '#0057ff' : 'transparent';
+        tab.style.color = p === plan ? '#fff' : '#6b7280';
+      });
+    };
+
+    // Inject Security section after agent-tasks
+    function injectSecurity() {
+      var tasks = document.getElementById('agent-tasks-section');
+      if (!tasks) { setTimeout(injectSecurity, 400); return; }
+      if (document.getElementById('security-section')) return;
+
+      var section = document.createElement('section');
+      section.id = 'security-section';
+      section.style.cssText = 'padding:80px 0;border-bottom:1px solid #e5e7eb;background:#0a0a0a;';
+      section.innerHTML = `
+        <div style="max-width:1200px;margin:0 auto;padding:0 6%;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+            <div>
+              <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);display:flex;align-items:center;gap:10px;margin-bottom:22px;">
+                Security & Confidentiality <span style="display:inline-block;width:32px;height:1px;background:rgba(255,255,255,0.1);"></span>
+              </div>
+              <h2 style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.07;letter-spacing:-0.04em;margin:0 0 18px;color:#fff;">
+                Enterprise-Ready<br><span style="font-weight:300;color:rgba(255,255,255,0.35);">Security.</span><br><span style="color:#0057ff;">100% Confidentiality.</span>
+              </h2>
+              <p style="font-size:0.975rem;color:rgba(255,255,255,0.4);line-height:1.75;font-weight:300;max-width:460px;margin:0 0 32px;">
+                Every contract, negotiation, and communication is protected by enterprise-grade encryption. Your data is yours — we never sell, share, or expose it. Ever.
+              </p>
+              <a href="#pricing" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:#0057ff;color:#fff;border-radius:8px;font-size:0.9rem;font-weight:700;text-decoration:none;">
+                See Our Plans →
+              </a>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              ${securityCard('🔐','Enterprise-Grade Encryption','Bank-level AES-256 encryption for all communications, documents, and contracts at rest and in transit.')}
+              ${securityCard('🔒','Zero Data Selling','We never sell, share, or monetise your personal data, contract details, or deal information. Ever.')}
+              ${securityCard('📁','Secure Document Vault','Contracts, offers, medical records, and sensitive files stored in an isolated, access-controlled vault.')}
+              ${securityCard('👁️','Zero Knowledge Architecture','Your AI agents process data without exposing raw information to third parties or external systems.')}
+              ${securityCard('🛡️','Full Legal Confidentiality','NDAs, attorney-client privilege structures, and full legal confidentiality across every interaction.')}
+              ${securityCard('🌍','GDPR & Global Compliance','Full compliance with GDPR, CCPA, and international data protection regulations in every jurisdiction.')}
+            </div>
+          </div>
+        </div>
+      `;
+      tasks.after(section);
+    }
+
+    var secCardNum = 0;
+    function securityCard(icon, title, desc) {
+      secCardNum++;
+      var n = String(secCardNum).padStart(2,'0');
+      return '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:22px;">' +
+        '<div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:rgba(255,255,255,0.2);text-transform:uppercase;margin-bottom:12px;">' + n + '</div>' +
+        '<h4 style="font-size:0.88rem;font-weight:700;color:#fff;margin:0 0 6px;">' + title + '</h4>' +
+        '<p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0;">' + desc + '</p>' +
+      '</div>';
+    }
+
+    // Inject Club Fees Calculator after security section
+    function injectClubCalc() {
+      var security = document.getElementById('security-section');
+      if (!security) { setTimeout(injectClubCalc, 500); return; }
+      if (document.getElementById('club-calc-section')) return;
+
+      var section = document.createElement('section');
+      section.id = 'club-calc-section';
+      section.style.cssText = 'padding:96px 0;border-bottom:1px solid #e5e7eb;background:#f8faff;';
+      section.innerHTML = `
+        <div style="max-width:1200px;margin:0 auto;padding:0 6%;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;">
+            <div>
+              <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#9ca3af;display:flex;align-items:center;gap:10px;margin-bottom:22px;">
+                Club Savings Calculator <span style="display:inline-block;width:32px;height:1px;background:#e5e7eb;"></span>
+              </div>
+              <h2 style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.07;letter-spacing:-0.04em;margin:0 0 18px;">
+                How Much Is Your Club<br><span style="color:#9ca3af;font-weight:300;">Overpaying?</span>
+              </h2>
+              <p style="font-size:0.975rem;color:#6b7280;line-height:1.75;font-weight:300;max-width:460px;margin:0;">
+                Enter what your club spent last year on intermediary and agency fees, plus your total transfer spend. We'll show you exactly what you'd pay with AgentOS — and what you'd keep.
+              </p>
+              <div style="margin-top:28px;padding:20px 24px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;">
+                <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px;" id="club-howto-title">How to use</div>
+                <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;">
+                  <li style="font-size:0.82rem;color:#6b7280;">Enter the total your club paid to intermediaries/agents last year</li>
+                  <li style="font-size:0.82rem;color:#6b7280;">Enter your total transfer spend (all signings combined)</li>
+                  <li style="font-size:0.82rem;color:#6b7280;">Select your preferred currency (€ £ $)</li>
+                  <li style="font-size:0.82rem;color:#6b7280;">Hit the button — see exactly what AgentOS would have cost you</li>
+                </ol>
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f0f0f0;font-size:0.72rem;color:#9ca3af;">
+                  Tip: Find your club's intermediary payments in the official FIFA TMS or your national federation's published data.
+                </div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:32px;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;">
+                <div style="font-size:0.88rem;font-weight:700;color:#0a0a0a;line-height:1.3;">
+                  Club Agency Fee Calculator<br><span style="color:#0057ff;font-size:0.78rem;">with AgentOS</span>
+                </div>
+                <div style="display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:3px;">
+                  <button onclick="setClubCurrency('€')" id="club-cur-eur" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.8rem;font-weight:700;cursor:pointer;background:#0057ff;color:#fff;">€</button>
+                  <button onclick="setClubCurrency('£')" id="club-cur-gbp" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.8rem;font-weight:700;cursor:pointer;background:transparent;color:#6b7280;">£</button>
+                  <button onclick="setClubCurrency('$')" id="club-cur-usd" style="padding:5px 10px;border:none;border-radius:6px;font-size:0.8rem;font-weight:700;cursor:pointer;background:transparent;color:#6b7280;">$</button>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div>
+                  <label style="display:block;font-size:0.78rem;font-weight:600;color:#374151;margin-bottom:6px;" id="club-fees-label">Agency / Intermediary Fees Paid Last Year</label>
+                  <div style="position:relative;">
+                    <span id="club-cur-sym-fees" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#9ca3af;font-weight:600;">€</span>
+                    <input id="club-fees" type="number" placeholder="5,000,000" min="0" style="width:100%;padding:12px 14px 12px 30px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:1rem;font-weight:600;color:#111;background:#fff;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#0057ff'" onblur="this.style.borderColor='#e5e7eb'"/>
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-size:0.78rem;font-weight:600;color:#374151;margin-bottom:6px;" id="club-transfers-label">Total Transfer Spend Last Year</label>
+                  <div style="position:relative;">
+                    <span id="club-cur-sym-transfers" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#9ca3af;font-weight:600;">€</span>
+                    <input id="club-transfers" type="number" placeholder="50,000,000" min="0" style="width:100%;padding:12px 14px 12px 30px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:1rem;font-weight:600;color:#111;background:#fff;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#0057ff'" onblur="this.style.borderColor='#e5e7eb'"/>
+                  </div>
+                </div>
+                <button onclick="calcClubSavings()" style="width:100%;padding:13px;background:#0057ff;color:#fff;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;">
+                  Show My Club's Savings →
+                </button>
+              </div>
+
+              <div id="club-result" style="display:none;margin-top:24px;border-top:1px solid #e5e7eb;padding-top:20px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                  <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:14px;">
+                    <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#ef4444;margin-bottom:5px;" id="club-trad-label">What You Paid</div>
+                    <div id="club-traditional" style="font-size:1.4rem;font-weight:800;color:#ef4444;line-height:1;"></div>
+                    <div style="font-size:0.7rem;color:#9ca3af;margin-top:3px;" id="club-fees-note">last year in fees</div>
+                  </div>
+                  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;">
+                    <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#16a34a;margin-bottom:5px;" id="club-agentos-result-label">With AgentOS</div>
+                    <div id="club-agentos" style="font-size:1.4rem;font-weight:800;color:#16a34a;line-height:1;"></div>
+                    <div style="font-size:0.7rem;color:#9ca3af;margin-top:3px;" id="club-cost-note">annual cost</div>
+                  </div>
+                </div>
+                <div style="background:linear-gradient(135deg,#0057ff,#0033cc);border-radius:12px;padding:18px;text-align:center;">
+                  <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.5);margin-bottom:4px;" id="club-save-label">Your Club Saves</div>
+                  <div id="club-savings" style="font-size:2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.04em;"></div>
+                  <div id="club-pct-saved" style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:5px;"></div>
+                </div>
+                <p style="font-size:0.72rem;color:#9ca3af;margin-top:12px;line-height:1.5;text-align:center;">
+                  AgentOS Clubs = €78,000/year subscription + 2% on transfer spend. No hidden fees.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      security.after(section);
+    }
+
+    window.calcClubSavings = function() {
+      var fees = getRawValue('club-fees');
+      var transfers = getRawValue('club-transfers');
+      if (!fees && !transfers) { alert('Please enter at least your agency fees paid last year.'); return; }
+
+      var traditional = fees;
+      var agentOS = 78000 + (transfers * 0.02);
+      var saved = traditional - agentOS;
+      var pctSaved = traditional > 0 ? ((saved / traditional) * 100).toFixed(0) : 0;
+
+      function fmt(n) { return fmtNum(n, clubCurrency); }
+
+      document.getElementById('club-traditional').textContent = fmt(traditional);
+      document.getElementById('club-agentos').textContent = fmt(agentOS);
+      document.getElementById('club-savings').textContent = saved > 0 ? fmt(saved) : '€0';
+      document.getElementById('club-pct-saved').textContent = saved > 0
+        ? pctSaved + '% less than traditional intermediary fees'
+        : 'Cost-effective on larger transfer volumes';
+
+      document.getElementById('club-result').style.display = 'block';
+    };
+
+    injectAgentTasks();
+    injectSecurity();
+    injectClubCalc();
+    injectCalculator();
+  });
+  </script>
+  </body>
+</html>

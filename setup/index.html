@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Set Up Your AI Team — AgentOS 24/7</title>
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f5f7ff; color: #1a1a2e; margin: 0; padding: 0; min-height: 100vh; }
+    .nav { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 0 6%; height: 64px; display: flex; align-items: center; }
+    .nav-brand { font-size: 1.2rem; font-weight: 800; text-decoration: none; color: #1a1a2e; letter-spacing: -0.03em; }
+    .nav-brand span { font-weight: 300; color: #6b7280; }
+    .wrapper { max-width: 640px; margin: 0 auto; padding: 48px 24px 100px; }
+
+    /* Progress */
+    .progress { display: flex; align-items: center; margin-bottom: 40px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; transition: all 0.3s; }
+    .step-circle.done { background: #0057ff; color: #fff; }
+    .step-circle.active { background: #0057ff; color: #fff; box-shadow: 0 0 0 4px #dbeafe; }
+    .step-circle.pending { background: #e5e7eb; color: #9ca3af; }
+    .step-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; }
+    .step-label.active { color: #0057ff; }
+    .progress-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 12px; transition: background 0.3s; }
+    .progress-line.done { background: #0057ff; }
+
+    /* Card */
+    .card { background: #fff; border-radius: 16px; padding: 36px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 8px; }
+    .subtitle { font-size: 0.9rem; color: #6b7280; line-height: 1.65; margin: 0 0 28px; }
+    .plan-badge { display: inline-block; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; border-radius: 8px; padding: 6px 14px; font-size: 0.78rem; font-weight: 700; margin-bottom: 24px; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+    .step { display: flex; gap: 16px; }
+    .step-num { width: 34px; height: 34px; background: #0057ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0; margin-top: 2px; }
+    .step-body h4 { margin: 0 0 4px; font-size: 0.93rem; font-weight: 700; }
+    .step-body p { margin: 0; font-size: 0.85rem; color: #6b7280; line-height: 1.6; }
+
+    /* Copy box */
+    .copy-box { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-top: 10px; gap: 12px; }
+    .copy-box code { font-family: monospace; font-size: 0.9rem; color: #0057ff; font-weight: 600; }
+    .copy-btn { background: #0057ff; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; font-size: 0.78rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+    .copy-btn:hover { background: #0046d4; }
+    .copy-btn.copied { background: #22c55e; }
+
+    /* Token input */
+    .token-section { border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: border-color 0.2s; }
+    .token-section.valid { border-color: #86efac; background: #f0fdf4; }
+    .token-section.invalid { border-color: #fca5a5; }
+    .token-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .token-emoji { font-size: 1.6rem; }
+    .token-info h4 { margin: 0 0 2px; font-size: 0.92rem; font-weight: 700; }
+    .token-info p { margin: 0; font-size: 0.78rem; color: #6b7280; }
+    label.field-label { display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    input[type=text] { width: 100%; padding: 11px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none; transition: border-color 0.2s; background: #fff; }
+    input[type=text]:focus { border-color: #0057ff; box-shadow: 0 0 0 3px #dbeafe; }
+    input[type=text].valid { border-color: #22c55e; }
+    input[type=text].invalid { border-color: #ef4444; }
+
+    /* Telegram ID */
+    .tg-section { margin-bottom: 24px; }
+    .tg-hint { font-size: 0.77rem; color: #9ca3af; margin-top: 5px; }
+
+    /* Buttons */
+    .btn-primary { width: 100%; padding: 15px; background: #0057ff; color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-primary:hover:not(:disabled) { background: #0046d4; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .back-link { display: inline-flex; align-items: center; gap: 5px; color: #6b7280; font-size: 0.83rem; font-weight: 500; cursor: pointer; text-decoration: none; margin-bottom: 20px; }
+    .back-link:hover { color: #374151; }
+
+    /* Tip */
+    .tip { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 0.82rem; color: #92400e; line-height: 1.5; }
+
+    /* Error */
+    .error-msg { background: #fff1f2; border: 1px solid #fca5a5; color: #dc2626; border-radius: 8px; padding: 12px 16px; font-size: 0.84rem; margin-top: 14px; display: none; }
+
+    /* Loading */
+    .loading { display: none; text-align: center; padding: 16px; color: #6b7280; font-size: 0.88rem; }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #e5e7eb; border-top-color: #0057ff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Success */
+    .success-body { text-align: center; padding: 48px 24px; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .success-body h2 { font-size: 1.6rem; font-weight: 800; margin: 0 0 10px; }
+    .success-body p { color: #6b7280; font-size: 0.92rem; line-height: 1.65; margin: 0 0 10px; }
+    .tg-open-btn { display: inline-flex; align-items: center; gap: 8px; background: #229ED9; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; margin-top: 20px; transition: background 0.2s; }
+    .tg-open-btn:hover { background: #1a85b8; }
+
+    /* Boot steps */
+    .boot-step { display:flex; align-items:center; gap:10px; font-size:0.88rem; color:#374151; transition:opacity 0.4s; }
+    .boot-step .bicon { font-size:1rem; }
+    .boot-step.done { opacity:1 !important; }
+    .boot-step.done .bicon::before { content:'✅'; }
+    /* Misc */
+    .init-loading { padding: 60px; text-align: center; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-brand">AgentOS <span>24/7</span></a>
+  </nav>
+
+  <div class="wrapper">
+
+    <!-- Progress -->
+    <div class="progress" id="progressBar">
+      <div class="progress-step">
+        <div class="step-circle done">✓</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="progress-line done"></div>
+      <div class="progress-step">
+        <div class="step-circle active" id="prog2">2</div>
+        <span class="step-label active" id="label2">Connect Dante</span>
+      </div>
+      <div class="progress-line" id="line2"></div>
+      <div class="progress-step">
+        <div class="step-circle pending" id="prog3">3</div>
+        <span class="step-label" id="label3">Full Team Live</span>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="card" id="initCard">
+      <div class="init-loading"><span class="spinner"></span> Loading...</div>
+    </div>
+
+    <!-- Step 1: Instructions -->
+    <div class="card" id="instructionsCard" style="display:none">
+      <div class="plan-badge" id="planBadge">Plan</div>
+      <h1>Let's connect Dante K.</h1>
+      <p class="subtitle" id="welcomeMsg">Dante is your AgentOS customer support agent — he'll be live on Telegram and will personally guide you through onboarding the rest of your AI team.</p>
+
+      <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;margin-bottom:24px;">
+        <p style="font-size:13px;font-weight:600;color:#1d4ed8;margin:0 0 8px;">📱 Don't have Telegram yet?</p>
+        <p style="font-size:12px;color:#374151;margin:0 0 10px;">Your AI agents run on Telegram — it's free and takes 1 minute to install.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="https://apps.apple.com/app/telegram-messenger/id686449807" target="_blank" style="display:inline-block;background:#0057ff;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">📱 iPhone / iPad</a>
+          <a href="https://play.google.com/store/apps/details?id=org.telegram.messenger" target="_blank" style="display:inline-block;background:#0057ff;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">🤖 Android</a>
+          <a href="https://desktop.telegram.org" target="_blank" style="display:inline-block;background:#0057ff;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">💻 Desktop</a>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open BotFather on Telegram</h4>
+            <p>Search for <strong>@BotFather</strong> in Telegram and start a conversation.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Create a new bot</h4>
+            <p>Send <strong>/newbot</strong> to BotFather. It will ask for two things — use exactly these:</p>
+            <p style="font-size:0.8rem;font-weight:600;color:#374151;margin:10px 0 4px">① Bot display name (when asked "What name shall I give it?")</p>
+            <div class="copy-box">
+              <code id="botDisplayName">Dante K - Support | #000001</code>
+              <button class="copy-btn" onclick="copyField('botDisplayName', this)">Copy</button>
+            </div>
+            <p style="font-size:0.8rem;font-weight:600;color:#374151;margin:12px 0 4px">② Bot username (when asked "Now choose a username")</p>
+            <div class="copy-box">
+              <code id="botNameText">AgentOS_Dante_000001_bot</code>
+              <button class="copy-btn" onclick="copyField('botNameText', this)">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Copy the token BotFather gives you</h4>
+            <p>It looks like: <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:0.82rem">1234567890:AAFxyz...</code><br>Paste it on the next screen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        💡 <strong>Tip:</strong> Keep BotFather open in one window and this page in another. The bot name must match exactly — copy it using the button above.
+      </div>
+
+      <button class="btn-primary" onclick="showTokenForm()" style="margin-top:24px">
+        I've created the bot — paste my token →
+      </button>
+    </div>
+
+    <!-- Step 2: Token input -->
+    <div class="card" id="tokenCard" style="display:none">
+      <a class="back-link" onclick="showInstructions()">← Back</a>
+      <h1>Paste your token</h1>
+      <p class="subtitle">Paste the token BotFather gave you for your Dante bot.</p>
+
+      <div class="token-section" id="danteRow">
+        <div class="token-header">
+          <img src="https://agentos247.com/assets/dante-k-C9-79MAO.png" alt="Dante K." style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+          <div class="token-info">
+            <h4>Dante K. — Your Support Agent</h4>
+            <p>Technical support & team coordinator</p>
+          </div>
+        </div>
+        <label class="field-label" for="tokenDante">Bot token from BotFather</label>
+        <input type="text" id="tokenDante" placeholder="e.g. 1234567890:AAFabcdefghijklmnopqrstuvwxyz12345"
+          oninput="validateDanteToken()" onpaste="setTimeout(validateDanteToken, 50)" />
+      </div>
+
+      <div class="tg-section">
+        <label class="field-label" for="telegramId">Your Telegram ID <span style="font-size:11px;color:#9ca3af;font-weight:400;">(optional)</span></label>
+        <input type="text" id="telegramId" placeholder="e.g. 490130544" />
+        <p class="tg-hint">This locks your agents so only you can message them. To find your ID: open Telegram, search <a href="https://t.me/userinfobot" target="_blank" style="color:#0057ff">@userinfobot</a> and send any message — it replies with your TG ID number instantly.</p>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <button class="btn-primary" id="deployBtn" onclick="submitToken()" disabled>
+        🚀 Connect Dante
+      </button>
+
+      <div class="loading" id="deployLoading">
+        <span class="spinner"></span> Connecting your agent...
+      </div>
+    </div>
+
+    <!-- Success / Booting -->
+    <div class="card" id="successCard" style="display:none">
+      <div class="success-body">
+        <div class="success-icon" id="successIcon">✓</div>
+        <h2 id="successTitle">Setting up your server...</h2>
+        <p id="successMsg">Your dedicated server is being created. This takes 2–3 minutes. Dante will be live on Telegram as soon as it's ready.</p>
+
+        <!-- Boot progress -->
+        <div id="bootProgress" style="margin:24px 0;text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:20px;">
+          <div class="boot-step" id="bStep1">
+            <span class="bicon">⏳</span> <span>Creating your dedicated server</span>
+          </div>
+          <div class="boot-step" id="bStep2" style="opacity:0.4;margin-top:10px">
+            <span class="bicon">⏳</span> <span>Installing agents</span>
+          </div>
+          <div class="boot-step" id="bStep3" style="opacity:0.4;margin-top:10px">
+            <span class="bicon">⏳</span> <span>Connecting Dante to Telegram</span>
+          </div>
+        </div>
+
+        <a id="danteLink" href="#" target="_blank" class="tg-open-btn" style="display:none">
+          Open Dante on Telegram →
+        </a>
+        <div style="margin-top:16px">
+          <a href="/" style="font-size:0.82rem;color:#9ca3af;text-decoration:none">← Back to AgentOS 24/7</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Already live -->
+    <div class="card" id="alreadyLiveCard" style="display:none">
+      <div class="success-body">
+        <div style="font-size:3rem;margin-bottom:16px">✅</div>
+        <h2 style="font-size:1.4rem">You're already set up!</h2>
+        <p>Your AI team is live on Telegram.</p>
+        <a href="/" style="display:inline-block;margin-top:16px;color:#0057ff;font-size:0.88rem">← Back to site</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API = '/api/setup';
+    let customerNum = null;
+    let danteToken = null;
+
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function copyField(id, btn) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function validateDanteToken() {
+      const val = document.getElementById('tokenDante').value.trim();
+      const input = document.getElementById('tokenDante');
+      const row = document.getElementById('danteRow');
+      const valid = /^\d+:[A-Za-z0-9_\-]{35,}$/.test(val);
+      if (!val) { input.className = ''; row.className = 'token-section'; }
+      else if (valid) { input.className = 'valid'; row.className = 'token-section valid'; }
+      else { input.className = 'invalid'; row.className = 'token-section invalid'; }
+      document.getElementById('deployBtn').disabled = !valid;
+      if (valid) danteToken = val;
+    }
+
+    function showTokenForm() {
+      document.getElementById('instructionsCard').style.display = 'none';
+      document.getElementById('tokenCard').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    function showInstructions() {
+      document.getElementById('tokenCard').style.display = 'none';
+      document.getElementById('instructionsCard').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    async function submitToken() {
+      const token = document.getElementById('tokenDante').value.trim();
+      const telegramId = document.getElementById('telegramId').value.trim();
+
+      document.getElementById('deployBtn').style.display = 'none';
+      document.getElementById('deployLoading').style.display = 'block';
+      document.getElementById('errorMsg').style.display = 'none';
+
+      try {
+        const res = await fetch(`${API}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customerNum, tokens: { dante: token }, telegramId, danteOnly: true })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          const botName = document.getElementById('botNameText').textContent;
+          document.getElementById('danteLink').href = `https://t.me/${botName}`;
+
+          document.getElementById('tokenCard').style.display = 'none';
+          document.getElementById('successCard').style.display = 'block';
+
+          // Update progress
+          document.getElementById('prog2').textContent = '✓';
+          document.getElementById('prog2').className = 'step-circle done';
+          document.getElementById('prog3').className = 'step-circle active';
+          document.getElementById('line2').className = 'progress-line done';
+          document.getElementById('label3').className = 'active';
+          window.scrollTo(0, 0);
+
+          // Start polling for instance boot
+          pollInstanceBoot(botName);
+        } else {
+          throw new Error(data.error || 'Something went wrong');
+        }
+      } catch(e) {
+        document.getElementById('deployBtn').style.display = 'block';
+        document.getElementById('deployLoading').style.display = 'none';
+        const err = document.getElementById('errorMsg');
+        err.textContent = `❌ ${e.message}. Please try again or contact team@agentos247.com`;
+        err.style.display = 'block';
+      }
+    }
+
+    async function init() {
+      customerNum = getParam('c');
+      if (!customerNum) {
+        document.getElementById('initCard').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444">❌ Invalid setup link. Please check your welcome email.</div>';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/info?c=${customerNum}`);
+        const data = await res.json();
+
+        document.getElementById('initCard').style.display = 'none';
+
+        if (!data.ok) {
+          document.getElementById('initCard').style.display = 'block';
+          document.getElementById('initCard').innerHTML = `<div style="padding:40px;text-align:center;color:#ef4444">❌ ${data.error}</div>`;
+          return;
+        }
+
+        if (data.alreadyLive) {
+          document.getElementById('progressBar').style.display = 'none';
+          document.getElementById('alreadyLiveCard').style.display = 'block';
+          return;
+        }
+
+        // Set bot name and welcome message
+        const danteBot = data.requiredBots.find(b => b.id === 'dante');
+        if (danteBot) {
+          document.getElementById('botNameText').textContent = danteBot.suggested;
+          document.getElementById('botDisplayName').textContent = `Dante K - Support | #${data.customerNum}`;
+        }
+
+        document.getElementById('planBadge').textContent = data.planName;
+        document.getElementById('welcomeMsg').textContent = `Hi ${data.customerName}! Follow the 3 steps below to connect your Dante support agent. Once live, Dante will walk you through setting up the rest of your team.`;
+        document.getElementById('instructionsCard').style.display = 'block';
+
+      } catch(e) {
+        document.getElementById('initCard').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444">❌ Failed to load. Try again or contact team@agentos247.com</div>';
+      }
+    }
+
+    async function pollInstanceBoot(botName) {
+      let attempts = 0;
+      const maxAttempts = 40; // ~3-4 mins
+
+      const step1 = document.getElementById('bStep1');
+      const step2 = document.getElementById('bStep2');
+      const step3 = document.getElementById('bStep3');
+
+      const interval = setInterval(async () => {
+        attempts++;
+        try {
+          const res = await fetch(`${API}/status?c=${customerNum}`);
+          const data = await res.json();
+          const state = data.instanceState;
+
+          if (state === 'running' || attempts > 12) {
+            step1.classList.add('done');
+            step2.style.opacity = '1';
+            step2.querySelector('.bicon').textContent = '✅';
+          }
+          if (state === 'running' || attempts > 20) {
+            step2.classList.add('done');
+            step3.style.opacity = '1';
+            step3.querySelector('.bicon').textContent = '✅';
+          }
+          if (state === 'running' && attempts > 20) {
+            clearInterval(interval);
+            step3.classList.add('done');
+            document.getElementById('successIcon').textContent = '🎉';
+            document.getElementById('successTitle').textContent = 'Dante is live!';
+            document.getElementById('successMsg').textContent = 'Your dedicated server is running. Open Dante on Telegram — he will walk you through connecting the rest of your team.';
+            document.getElementById('bootProgress').style.display = 'none';
+            document.getElementById('danteLink').style.display = 'inline-flex';
+          }
+        } catch(e) {}
+
+        if (attempts >= maxAttempts) clearInterval(interval);
+      }, 10000); // poll every 10s
+    }
+
+    init();
+  </script>
+</body>
+</html>
