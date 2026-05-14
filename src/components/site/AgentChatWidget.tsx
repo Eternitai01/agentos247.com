@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, Phone, X } from "lucide-react";
-import agentAvatar from "@/assets/agentos247-logo.png";
+import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
 const TELEGRAM_LINK = "https://t.me/agentos247_bot";
 const WHATSAPP_LINK = "https://wa.me/17869339375";
