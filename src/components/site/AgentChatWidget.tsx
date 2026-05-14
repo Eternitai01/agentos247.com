@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import Vapi from "@vapi-ai/web";
 import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
+const VAPI_PUBLIC_KEY = "28535a4b-015a-45b0-8d85-a6141da56ed2";
+const VAPI_ASSISTANT_ID = "431ae10d-3917-4ab8-8425-4c7def944653";
 const WHATSAPP_NUMBER = "17869339375";
-const RINGTONE_URL = "https://www.soundjay.com/phone/phone-ringtone-1.mp3";
 
 export function AgentChatWidget() {
   const [open, setOpen] = useState(false);
@@ -12,35 +14,50 @@ export function AgentChatWidget() {
   const [error, setError] = useState("");
   const [calling, setCalling] = useState(false);
   const [connected, setConnected] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const callRef = useRef<any>(null);
 
+  // Ringtone: 480Hz oscillator repeating every 2.5s (matches Clawolution Charlie)
   useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | null = null;
+    let ctx: AudioContext | null = null;
+
+    if (calling) {
+      const playRing = () => {
+        try {
+          if (!ctx) ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          if (ctx.state === "suspended") ctx.resume();
+          const now = ctx.currentTime;
+          [0, 0.2].forEach((delay) => {
+            const osc = ctx!.createOscillator();
+            const gain = ctx!.createGain();
+            osc.connect(gain);
+            gain.connect(ctx!.destination);
+            osc.frequency.value = 480;
+            osc.type = "sine";
+            gain.gain.setValueAtTime(0, now + delay);
+            gain.gain.linearRampToValueAtTime(0.25, now + delay + 0.05);
+            gain.gain.setValueAtTime(0.25, now + delay + 0.35);
+            gain.gain.linearRampToValueAtTime(0, now + delay + 0.45);
+            osc.start(now + delay);
+            osc.stop(now + delay + 0.5);
+          });
+        } catch {}
+      };
+      playRing();
+      interval = setInterval(playRing, 2500);
+    }
+
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      if (interval) clearInterval(interval);
+      if (ctx) ctx.close();
     };
-  }, []);
-
-  function playRingtone() {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(RINGTONE_URL);
-      audioRef.current.loop = true;
-    }
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch(() => {});
-  }
-
-  function stopRingtone() {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-  }
+  }, [calling]);
 
   function resetAll() {
-    stopRingtone();
+    if (callRef.current) {
+      try { callRef.current.stop(); } catch {}
+      callRef.current = null;
+    }
     setOpen(false);
     setLeadSource(null);
     setName("");
@@ -50,34 +67,25 @@ export function AgentChatWidget() {
     setConnected(false);
   }
 
-  function handleChannel(source: "telegram" | "whatsapp" | "call") {
-    setLeadSource(source);
-    setName("");
-    setEmail("");
-    setError("");
-  }
-
-  function handleBack() {
-    setLeadSource(null);
-    setName("");
-    setEmail("");
-    setError("");
-    setCalling(false);
+  function cancelCall() {
+    if (callRef.current) {
+      try { callRef.current.stop(); } catch {}
+      callRef.current = null;
+    }
     setConnected(false);
+    setCalling(false);
   }
 
-  function handleSubmit() {
-    setError("");
+  const startCall = useCallback(async () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
-    if (!trimmedName || !trimmedEmail) {
-      setError("Please enter your name and email");
+    if (!trimmedName) { setError("Please enter your name."); return; }
+    if (!trimmedEmail.includes("@") || trimmedEmail.indexOf(".", trimmedEmail.indexOf("@")) < 0) {
+      setError("Please enter a valid email.");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      setError("Please enter a valid email address");
-      return;
-    }
+    setError("");
+    setCalling(true);
 
     // Send lead
     fetch("/api/lead", {
@@ -86,53 +94,101 @@ export function AgentChatWidget() {
       body: JSON.stringify({
         name: trimmedName,
         email: trimmedEmail,
-        source: leadSource === "call" ? "voice-call" : `chat-widget-${leadSource}`,
+        source: "voice-call",
         page: window.location.href,
         timestamp: new Date().toISOString(),
       }),
     }).catch(() => {});
 
-    if (leadSource === "telegram") {
+    try {
+      const vapi = new Vapi(VAPI_PUBLIC_KEY);
+      vapi.on("call-start", () => {
+        setCalling(false);
+        setConnected(true);
+      });
+      vapi.on("call-end", () => {
+        setConnected(false);
+        setCalling(false);
+        callRef.current = null;
+      });
+      vapi.on("error", (e: any) => {
+        setCalling(false);
+        setCalling(false);
+        callRef.current = null;
+        const msg = String(e?.message || e?.error?.message || e || "").toLowerCase();
+        if (msg.includes("micro") || msg.includes("permission") || msg.includes("denied")) {
+          setError("Please allow microphone access in your browser.");
+        } else {
+          setError("Error: " + (e?.message || e?.error?.message || "Could not start call").slice(0, 100));
+        }
+      });
+      await vapi.start(VAPI_ASSISTANT_ID, {
+        variableValues: { customer_name: trimmedName, customer_email: trimmedEmail },
+      });
+      callRef.current = vapi;
+    } catch {
+      setCalling(false);
+      setError("Could not start call. Please try again.");
+    }
+  }, [name, email]);
+
+  function submitLead(source: "telegram" | "whatsapp") {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName) { setError("Please enter your name."); return; }
+    if (!trimmedEmail.includes("@") || trimmedEmail.indexOf(".", trimmedEmail.indexOf("@")) < 0) {
+      setError("Please enter a valid email.");
+      return;
+    }
+    setError("");
+
+    fetch("/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: trimmedName,
+        email: trimmedEmail,
+        source: `chat-widget-${source}`,
+        page: window.location.href,
+        timestamp: new Date().toISOString(),
+      }),
+    }).catch(() => {});
+
+    if (source === "telegram") {
       const param = encodeURIComponent(`${trimmedName}_${trimmedEmail}`);
       window.open(`https://t.me/agentos247_bot?start=${param}`, "_blank", "noopener,noreferrer");
-      resetAll();
-    } else if (leadSource === "whatsapp") {
+    } else {
       const text = encodeURIComponent(
         `Hi, I'm ${trimmedName} (${trimmedEmail}). I'd like to know more about AgentOS 24/7.`
       );
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
-      resetAll();
-    } else if (leadSource === "call") {
-      setCalling(true);
-      playRingtone();
-      // After ~7s, "connect" the call
-      setTimeout(() => {
-        stopRingtone();
-        setCalling(false);
-        setConnected(true);
-      }, 7000);
     }
+    resetAll();
   }
 
   return (
     <>
       <style>{`
-@keyframes agentPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
-  50% { box-shadow: 0 0 0 12px rgba(99,102,241,0); }
+@keyframes charliePulse {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.7), 0 0 0 0 rgba(34,197,94,0.3); }
+  70% { box-shadow: 0 0 0 10px rgba(34,197,94,0), 0 0 0 20px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
 }
-.agent-pulse { animation: agentPulse 2s ease-out infinite; }
+.charlie-live-photo { animation: charliePulse 1.5s ease-out infinite; }
 @keyframes charlieRing {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.7; }
+  0% { transform: rotate(-15deg); }
+  25% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+  100% { transform: rotate(0deg); }
 }
-.charlie-ring-anim { animation: charlieRing 0.5s ease-in-out infinite; }
+.charlie-ring-anim { animation: charlieRing 0.5s ease-in-out infinite; display: inline-block; font-size: 40px; }
       `}</style>
 
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-[99998] w-16 h-16 rounded-full cursor-pointer flex items-center justify-center shadow-lg hover:scale-105 transition-transform agent-pulse"
+        className="fixed bottom-6 right-6 z-[99998] w-16 h-16 rounded-full cursor-pointer flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
         style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
         aria-label="Chat with AgentOS 24/7"
       >
@@ -143,12 +199,11 @@ export function AgentChatWidget() {
         />
       </button>
 
-      {/* Popup: 3 channel buttons */}
+      {/* 3 channel buttons */}
       {open && !leadSource && (
         <div className="fixed bottom-28 right-6 z-[99998] flex flex-col items-end gap-2.5 font-sans">
-          {/* Telegram */}
           <button
-            onClick={() => handleChannel("telegram")}
+            onClick={() => setLeadSource("telegram")}
             className="flex items-center gap-2.5 bg-slate-900 border border-slate-700 rounded-full px-4 py-2.5 text-slate-200 text-sm font-medium hover:bg-slate-800 transition-colors shadow-lg whitespace-nowrap"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#60a5fa">
@@ -156,9 +211,8 @@ export function AgentChatWidget() {
             </svg>
             Chat on Telegram
           </button>
-          {/* WhatsApp */}
           <button
-            onClick={() => handleChannel("whatsapp")}
+            onClick={() => setLeadSource("whatsapp")}
             className="flex items-center gap-2.5 bg-slate-900 border border-slate-700 rounded-full px-4 py-2.5 text-slate-200 text-sm font-medium hover:bg-slate-800 transition-colors shadow-lg whitespace-nowrap"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#4ade80">
@@ -166,9 +220,8 @@ export function AgentChatWidget() {
             </svg>
             Chat on WhatsApp
           </button>
-          {/* Call Charlie */}
           <button
-            onClick={() => { handleChannel("call"); setOpen(false); }}
+            onClick={() => { setLeadSource("call"); setOpen(false); }}
             className="flex items-center gap-2.5 bg-slate-900 border border-slate-700 rounded-full px-4 py-2.5 text-slate-200 text-sm font-medium hover:bg-slate-800 transition-colors shadow-lg whitespace-nowrap"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#a78bfa">
@@ -179,107 +232,137 @@ export function AgentChatWidget() {
         </div>
       )}
 
-      {/* Lead form overlay (for Telegram, WhatsApp, or Call Charlie) */}
-      {leadSource && (
+      {/* Lead form or Call overlay */}
+      {leadSource === "telegram" || leadSource === "whatsapp" ? (
         <div
           className="fixed inset-0 bg-black/75 z-[99999] flex items-center justify-center p-4"
-          onClick={(e) => { if (e.target === e.currentTarget && !calling) handleBack(); }}
+          onClick={(e) => { if (e.target === e.currentTarget) setLeadSource(null); }}
         >
           <div className="bg-slate-900 border border-slate-700 rounded-2xl p-7 w-full max-w-sm">
-            {/* Lead form (before calling) */}
-            {!calling && !connected && (
-              <>
-                <p className="text-slate-500 text-sm mb-5">
-                  {leadSource === "call"
-                    ? "Enter your details and Charlie will join the call instantly."
-                    : "Enter your details and Charlie will greet you by name."}
-                </p>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your name"
-                  className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
-                  autoFocus
-                />
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  type="email"
-                  className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
-                />
-                {error && <p className="text-red-400 text-sm text-center mt-2">{error}</p>}
-                <button
-                  onClick={handleSubmit}
-                  className="w-full py-3 rounded-xl text-white font-semibold text-base cursor-pointer border-0"
-                  style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
-                >
-                  {leadSource === "call" ? "Start Call" : leadSource === "telegram" ? "Open Telegram" : "Open WhatsApp"}
-                </button>
-                <button
-                  onClick={handleBack}
-                  className="w-full py-2.5 bg-transparent border-0 text-slate-500 text-sm cursor-pointer mt-1"
-                >
-                  Cancel
-                </button>
-              </>
-            )}
-
-            {/* Calling animation */}
-            {calling && (
-              <div className="text-center py-4">
-                <p className="text-slate-500 text-xs uppercase tracking-widest mb-4">
-                  Calling AgentOS 24/7 · Powered by AI2me
-                </p>
-                <div className="relative inline-block">
-                  <img
-                    src={agentAvatar}
-                    alt="AgentOS 24/7"
-                    className="w-24 h-24 rounded-full object-cover object-center mx-auto border-2 border-blue-500"
-                    style={{
-                      boxShadow: "0 0 0 6px rgba(59,130,246,0.15), 0 0 0 12px rgba(59,130,246,0.08)",
-                    }}
-                  />
-                  <span
-                    className="absolute bottom-0 right-0 bg-blue-500 rounded-full w-7 h-7 flex items-center justify-center text-base charlie-ring-anim"
-                    style={{ animation: "charlieRing 0.5s ease-in-out infinite" }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                      <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
-                    </svg>
-                  </span>
-                </div>
-                <p className="text-white font-semibold text-lg mt-3">
-                  {name.split(" ")[0] || "Charlie"}
-                </p>
-                <p className="text-blue-400 text-sm">Calling...</p>
-              </div>
-            )}
-
-            {/* Connected */}
-            {connected && (
-              <div className="text-center py-2">
-                <div className="flex flex-col items-center">
-                  <img
-                    src={agentAvatar}
-                    alt="AgentOS 24/7"
-                    className="w-16 h-16 rounded-full object-cover object-center mx-auto border-2 border-green-500 mb-2"
-                  />
-                  <p className="text-green-400 font-semibold">{name.split(" ")[0]}! Charlie is on the line.</p>
-                  <p className="text-slate-400 text-sm mt-2">Speak now — Charlie can hear you.</p>
-                </div>
-                <button
-                  onClick={resetAll}
-                  className="mt-4 w-full py-3 rounded-xl text-white font-semibold text-base cursor-pointer border-0"
-                  style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
-                >
-                  Done
-                </button>
-              </div>
-            )}
+            <p className="font-bold text-lg mb-1" style={{ color: leadSource === "telegram" ? "#60a5fa" : "#4ade80" }}>
+              {leadSource === "telegram" ? "💬 Chat on Telegram" : "📱 Chat on WhatsApp"}
+            </p>
+            <p className="text-slate-500 text-sm mb-5">Enter your details and Charlie will greet you by name.</p>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
+              autoFocus
+            />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
+              type="email"
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
+            />
+            {error && <p className="text-red-400 text-sm text-center mt-2">{error}</p>}
+            <button
+              onClick={() => submitLead(leadSource)}
+              className="w-full py-3 rounded-xl text-white font-semibold text-base cursor-pointer border-0"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+            >
+              {leadSource === "telegram" ? "Open Telegram" : "Open WhatsApp"}
+            </button>
+            <button
+              onClick={() => setLeadSource(null)}
+              className="w-full py-2.5 bg-transparent border-0 text-slate-500 text-sm cursor-pointer mt-1"
+            >
+              Cancel
+            </button>
           </div>
         </div>
-      )}
+      ) : leadSource === "call" && !calling && !connected ? (
+        <div
+          className="fixed inset-0 bg-black/75 z-[99999] flex items-center justify-center p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) { cancelCall(); setLeadSource(null); } }}
+        >
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-7 w-full max-w-sm">
+            <p className="text-slate-500 text-sm mb-5">Enter your details and Charlie will join the call instantly.</p>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
+              autoFocus
+            />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
+              type="email"
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white text-sm mb-2.5 outline-none focus:border-blue-500"
+            />
+            {error && <p className="text-red-400 text-sm text-center mt-2">{error}</p>}
+            <button
+              onClick={startCall}
+              className="w-full py-3 rounded-xl text-white font-semibold text-base cursor-pointer border-0"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+            >
+              Start Call
+            </button>
+            <button
+              onClick={() => { cancelCall(); setLeadSource(null); }}
+              className="w-full py-2.5 bg-transparent border-0 text-slate-500 text-sm cursor-pointer mt-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : leadSource === "call" && calling ? (
+        <div className="fixed inset-0 bg-black/75 z-[99999] flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-7 w-full max-w-sm text-center py-4">
+            <p className="text-slate-500 text-xs uppercase tracking-widest mb-4">
+              Calling AgentOS 24/7 · Powered by AI2me
+            </p>
+            <div className="relative inline-block">
+              <img
+                src={agentAvatar}
+                alt="AgentOS 24/7"
+                className="w-24 h-24 rounded-full object-cover object-center mx-auto border-2 border-blue-500"
+                style={{
+                  boxShadow: "0 0 0 6px rgba(59,130,246,0.15), 0 0 0 12px rgba(59,130,246,0.08)",
+                }}
+              />
+              <span className="absolute bottom-0 right-0 bg-blue-500 rounded-full w-7 h-7 flex items-center justify-center text-base charlie-ring-anim">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                  <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                </svg>
+              </span>
+            </div>
+            <p className="text-white font-semibold text-lg mt-3">{name.split(" ")[0] || "Charlie"}</p>
+            <p className="text-blue-400 text-sm">Calling...</p>
+            <button
+              onClick={() => { cancelCall(); setLeadSource(null); }}
+              className="mt-4 text-sm text-red-400 hover:text-red-300 transition-colors underline underline-offset-2"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : leadSource === "call" && connected ? (
+        <div className="fixed inset-0 bg-black/75 z-[99999] flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-7 w-full max-w-sm">
+            <div className="text-center py-2">
+              <img
+                src={agentAvatar}
+                alt="AgentOS 24/7"
+                className="charlie-live-photo w-16 h-16 rounded-full object-cover object-center mx-auto border-2 border-green-500 mb-2"
+              />
+              <p className="text-green-400 font-semibold">{name.split(" ")[0]}! Charlie is on the line.</p>
+              <p className="text-slate-400 text-sm mt-2">Speak now — Charlie can hear you.</p>
+            </div>
+            <button
+              onClick={() => { cancelCall(); setLeadSource(null); }}
+              className="mt-4 w-full py-3 rounded-xl text-white font-semibold text-base cursor-pointer border-0"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
