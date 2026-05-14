@@ -66,9 +66,49 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+// Forward lead capture to internal hooks endpoint
+async function handleLeadCapture(request: Request): Promise<Response> {
+  try {
+    const lead = await request.json();
+    console.log("[LEAD CAPTURE]", JSON.stringify(lead));
+
+    // Forward to hooks endpoint for processing
+    try {
+      await fetch("http://localhost:18789/hooks/agent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer hooks-o3zWBFPMhc4mGD06yK37EDpuVKmzarlA",
+        },
+        body: JSON.stringify({
+          type: "lead_capture",
+          payload: lead,
+        }),
+      }).catch(() => {});
+    } catch {
+      // silently fail
+    }
+
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { "content-type": "application/json" },
+    });
+  } catch {
+    return new Response(JSON.stringify({ ok: false, error: "invalid payload" }), {
+      status: 400,
+      headers: { "content-type": "application/json" },
+    });
+  }
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      // Handle API routes first
+      const url = new URL(request.url);
+      if (url.pathname === "/api/lead" && request.method === "POST") {
+        return await handleLeadCapture(request);
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
