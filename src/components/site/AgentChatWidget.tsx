@@ -3,6 +3,7 @@ import { MessageCircle, Phone, X, Loader2 } from "lucide-react";
 import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
 const WHATSAPP_NUMBER = "17869339375";
+const TWILIO_NUMBER = "+17869339375";
 
 function globalStyles() {
   return `
@@ -54,6 +55,7 @@ export function AgentChatWidget() {
           source: "chat-widget",
           page: window.location.href,
           timestamp: new Date().toISOString(),
+          intent: "call_charlie",
         }),
       }).catch(() => {});
     } catch {}
@@ -73,6 +75,12 @@ export function AgentChatWidget() {
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
     resetAndClose();
+  }
+
+  function callCharlie() {
+    // Opens the user's phone dialer to call Twilio -> Vapi -> Charlie
+    window.location.href = `tel:${TWILIO_NUMBER}`;
+    setTimeout(resetAndClose, 100);
   }
 
   if (!open) {
@@ -113,12 +121,6 @@ export function AgentChatWidget() {
           >
             <X className="w-5 h-5" />
           </button>
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 z-10 text-slate-500 hover:text-white transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
 
           {/* STEP 1: Lead Form */}
           {step === "form" && (
@@ -199,6 +201,18 @@ export function AgentChatWidget() {
                   <div className="text-left flex-1 min-w-0">
                     <p className="font-medium text-sm">WhatsApp</p>
                     <p className="text-xs text-slate-500 truncate">+1 (786) 933-9375</p>
+                  </div>
+                  <svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+                <button onClick={callCharlie} className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/15 text-white rounded-xl px-4 py-3.5 transition-all">
+                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                    <Phone className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="font-medium text-sm">Call Charlie</p>
+                    <p className="text-xs text-slate-500 truncate">Talk to Charlie by phone</p>
                   </div>
                   <svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
