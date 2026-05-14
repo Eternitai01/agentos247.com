@@ -1,20 +1,46 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
 const WHATSAPP_NUMBER = "17869339375";
+const RINGTONE_URL = "https://www.soundjay.com/phone/phone-ringtone-1.mp3";
 
 export function AgentChatWidget() {
   const [open, setOpen] = useState(false);
-  // leadSource: null | "telegram" | "whatsapp" | "call"
   const [leadSource, setLeadSource] = useState<"telegram" | "whatsapp" | "call" | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  // calling state
   const [calling, setCalling] = useState(false);
   const [connected, setConnected] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  function playRingtone() {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(RINGTONE_URL);
+      audioRef.current.loop = true;
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
+  }
+
+  function stopRingtone() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  }
 
   function resetAll() {
+    stopRingtone();
     setOpen(false);
     setLeadSource(null);
     setName("");
@@ -78,8 +104,10 @@ export function AgentChatWidget() {
       resetAll();
     } else if (leadSource === "call") {
       setCalling(true);
+      playRingtone();
       // After ~7s, "connect" the call
       setTimeout(() => {
+        stopRingtone();
         setCalling(false);
         setConnected(true);
       }, 7000);
