@@ -100,40 +100,6 @@ async function handleLeadCapture(request: Request): Promise<Response> {
   }
 }
 
-// Handle outbound call request from the chat widget
-async function handleCallRequest(request: Request): Promise<Response> {
-  try {
-    const callData = await request.json();
-    console.log("[CALL REQUEST]", JSON.stringify(callData));
-
-    // Forward to hooks endpoint for agent processing
-    try {
-      await fetch("http://localhost:18789/hooks/agent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer hooks-o3zWBFPMhc4mGD06yK37EDpuVKmzarlA",
-        },
-        body: JSON.stringify({
-          type: "call_request",
-          payload: callData,
-        }),
-      }).catch(() => {});
-    } catch {
-      // silently fail
-    }
-
-    return new Response(JSON.stringify({ ok: true }), {
-      headers: { "content-type": "application/json" },
-    });
-  } catch {
-    return new Response(JSON.stringify({ ok: false, error: "invalid payload" }), {
-      status: 400,
-      headers: { "content-type": "application/json" },
-    });
-  }
-}
-
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
@@ -141,9 +107,6 @@ export default {
       const url = new URL(request.url);
       if (url.pathname === "/api/lead" && request.method === "POST") {
         return await handleLeadCapture(request);
-      }
-      if (url.pathname === "/api/call" && request.method === "POST") {
-        return await handleCallRequest(request);
       }
 
       const handler = await getServerEntry();

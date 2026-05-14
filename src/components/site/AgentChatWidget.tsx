@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MessageCircle, Phone, X, Check, Loader2, PhoneCall } from "lucide-react";
+import { MessageCircle, Phone, X, Check, Loader2 } from "lucide-react";
 import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
 const TELEGRAM_LINK = "https://t.me/agentos247_bot";
@@ -28,19 +28,22 @@ function globalStyles() {
 
 export function AgentChatWidget() {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<"form" | "channels" | "phone-input" | "calling" | "connected">("form");
+  const [step, setStep] = useState<"form" | "channels" | "calling" | "connected">("form");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const ringTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
+      }
+      if (ringTimeoutRef.current) {
+        clearTimeout(ringTimeoutRef.current);
       }
     };
   }, []);
@@ -66,7 +69,6 @@ export function AgentChatWidget() {
     setStep("form");
     setName("");
     setEmail("");
-    setPhone("");
     setError("");
     setOpen(false);
   }
@@ -116,51 +118,15 @@ export function AgentChatWidget() {
     resetAndClose();
   }
 
-  function showCallForm() {
-    setStep("phone-input");
-    setError("");
-  }
-
-  async function initiateCall(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-
-    const trimmedPhone = phone.trim().replace(/[\s\-\(\)]/g, "");
-    if (!trimmedPhone) {
-      setError("Please enter your phone number");
-      return;
-    }
-    // Basic phone validation: at least 7 digits
-    const digits = trimmedPhone.replace(/\D/g, "");
-    if (digits.length < 7) {
-      setError("Please enter a valid phone number with country code");
-      return;
-    }
-
-    // Ensure + prefix
-    const fullPhone = trimmedPhone.startsWith("+") ? trimmedPhone : `+1${trimmedPhone}`;
-
+  function startCallFlow() {
     setStep("calling");
     playRing();
 
-    // Initiate the outbound call via Twilio->Vapi
-    try {
-      fetch("/api/call", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          phone: fullPhone,
-          source: "chat-widget",
-          timestamp: new Date().toISOString(),
-        }),
-      }).catch(() => {});
-    } catch {}
-  }
-
-  function requestCallback() {
-    setStep("connected");
+    // After 5 seconds, connect the call
+    ringTimeoutRef.current = setTimeout(() => {
+      stopRing();
+      setStep("connected");
+    }, 7000);
   }
 
   if (!open) {
@@ -288,13 +254,13 @@ export function AgentChatWidget() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
-                <button onClick={showCallForm} className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/15 text-white rounded-xl px-4 py-3.5 transition-all">
+                <button onClick={startCallFlow} className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/15 text-white rounded-xl px-4 py-3.5 transition-all">
                   <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                    <PhoneCall className="w-5 h-5 text-purple-400" />
+                    <Phone className="w-5 h-5 text-purple-400 agent-ring-anim" />
                   </div>
                   <div className="text-left flex-1 min-w-0">
                     <p className="font-medium text-sm">Call Charlie</p>
-                    <p className="text-xs text-slate-500 truncate">Charlie calls you back</p>
+                    <p className="text-xs text-slate-500 truncate">Voice call with AI assistant</p>
                   </div>
                   <svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -304,51 +270,11 @@ export function AgentChatWidget() {
             </div>
           )}
 
-          {/* STEP 3: Phone Number Input */}
-          {step === "phone-input" && (
-            <form onSubmit={initiateCall} className="p-6">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full mx-auto border-2 border-purple-500 overflow-hidden mb-3">
-                  <img src={agentAvatar} alt="AgentOS 24/7" className="w-full h-full object-cover" />
-                </div>
-                <p className="text-white font-semibold text-lg">Call Charlie</p>
-                <p className="text-slate-400 text-sm mt-1">
-                  Enter your phone number and Charlie will call you back.
-                </p>
-              </div>
-              <div>
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+1 (555) 123-4567"
-                  type="tel"
-                  autoFocus
-                  className="w-full bg-white/10 border border-white/20 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500 transition-colors placeholder:text-slate-500"
-                />
-              </div>
-              {error && <p className="text-red-400 text-sm mt-2 text-center">{error}</p>}
-              <button
-                type="submit"
-                className="w-full mt-4 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl py-3 text-sm transition-all flex items-center justify-center gap-2"
-              >
-                <Phone className="w-4 h-4" />
-                Call me now
-              </button>
-              <button
-                type="button"
-                onClick={() => setStep("channels")}
-                className="w-full mt-2 text-sm text-slate-500 hover:text-slate-300 transition-colors"
-              >
-                Back
-              </button>
-            </form>
-          )}
-
-          {/* STEP 4: Calling */}
+          {/* STEP 3: Calling Charlie (ringing with real ringtone) */}
           {step === "calling" && (
             <div className="text-center py-12 px-6">
               <p className="text-slate-500 text-xs uppercase tracking-widest mb-8">
-                Calling you now · {name.split(" ")[0]}
+                Calling AgentOS 24/7 · {name.split(" ")[0]}
               </p>
               <div className="relative inline-flex items-center justify-center mb-6">
                 <div className="ring-wave" />
@@ -357,38 +283,63 @@ export function AgentChatWidget() {
                 <img
                   src={agentAvatar}
                   alt="AgentOS 24/7"
-                  className="w-24 h-24 rounded-full object-cover object-center border-2 border-indigo-500 relative z-10"
-                  style={{ boxShadow: "0 0 0 6px rgba(99,102,241,0.2)" }}
+                  className="agent-pulse w-24 h-24 rounded-full object-cover object-center border-2 border-indigo-500 relative z-10"
+                  style={{ boxShadow: "0 0 0 6px rgba(99,102,241,0.15), 0 0 0 12px rgba(99,102,241,0.08)" }}
                 />
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-7 h-7 flex items-center justify-center text-base animate-pulse">
+                  <Phone className="w-4 h-4 text-white" />
+                </div>
               </div>
-              <p className="text-white font-semibold text-lg mt-2">Charlie is calling you</p>
-              <p className="text-indigo-400 text-sm mt-1">{phone}</p>
-              <p className="text-slate-500 text-xs mt-4">Answer your phone to speak with Charlie</p>
+              <p className="text-white font-semibold text-lg">Calling Charlie…</p>
+              <p className="text-indigo-400 text-sm mt-1">Connecting you now</p>
+
               <button
                 onClick={() => { stopRing(); setStep("channels"); }}
                 className="mt-8 text-sm text-red-400 hover:text-red-300 transition-colors underline underline-offset-2"
               >
-                Cancel
+                Cancel call
               </button>
             </div>
           )}
 
-          {/* STEP 5: Connected / Callback */}
+          {/* STEP 4: Connected to Charlie */}
           {step === "connected" && (
             <div className="text-center py-10 px-6">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-green-400" />
-              </div>
-              <p className="text-white font-semibold text-lg">Callback Requested</p>
-              <p className="text-slate-400 text-sm mt-2 leading-relaxed">
-                Charlie is calling you at <span className="text-indigo-400">{phone}</span>. Answer the call to speak with her directly!
+              <p className="text-slate-500 text-xs uppercase tracking-widest mb-4">
+                Connected · AgentOS 24/7
               </p>
+              <div className="relative inline-block">
+                <img
+                  src={agentAvatar}
+                  alt="AgentOS 24/7"
+                  className="w-24 h-24 rounded-full object-cover object-center mx-auto border-2 border-green-500"
+                  style={{ boxShadow: "0 0 0 6px rgba(34,197,94,0.2), 0 0 0 12px rgba(34,197,94,0.08)" }}
+                />
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-7 h-7 flex items-center justify-center">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+              </div>
+              <p className="text-white font-semibold text-lg mt-3">Charlie is here!</p>
+              <p className="text-slate-400 text-sm mt-2 leading-relaxed px-2">
+                Hi {name.split(" ")[0]}! I'll call you back on WhatsApp shortly.
+              </p>
+
               <button
-                onClick={resetAndClose}
-                className="mt-6 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                onClick={() => { window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank"); resetAndClose(); }}
+                className="mt-6 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl px-6 py-3 text-sm font-semibold transition-all"
               >
-                Got it, thanks!
+                <Phone className="w-4 h-4" />
+                Open WhatsApp
               </button>
+
+              <div className="mt-4">
+                <button
+                  onClick={() => { setStep("channels"); }}
+                  className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                  Back to channels
+                </button>
+              </div>
             </div>
           )}
         </div>
