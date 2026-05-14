@@ -215,7 +215,7 @@ export function AgentChatWidget() {
                 </div>
                 <p className="text-white font-semibold text-lg">Chat with Charlie</p>
                 <p className="text-slate-400 text-sm mt-1">
-                  Enter your details and I'll greet you by name.
+                  Enter your details and let's chat about AI agents
                 </p>
               </div>
               <div className="space-y-3">
