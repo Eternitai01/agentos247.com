@@ -4,7 +4,7 @@ import agentAvatar from "@/assets/charlie-agentos247.jpg";
 
 const VAPI_PUBLIC_KEY = "28535a4b-015a-45b0-8d85-a6141da56ed2";
 const VAPI_ASSISTANT_ID = "431ae10d-3917-4ab8-8425-4c7def944653";
-const WHATSAPP_NUMBER = "17869339375";
+const WHATSAPP_NUMBER = "14786063563";
 
 export function AgentChatWidget() {
   const [open, setOpen] = useState(false);
