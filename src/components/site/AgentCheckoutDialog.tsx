@@ -67,23 +67,24 @@ export function AgentCheckoutDialog({
     if (!agreed || !email || !telegramId) return;
     setLoading(true);
     try {
-      const res = await fetch("/api/agentos247/checkout", {
+      const channel =
+        plan === "basic" ? "telegram" :
+        plan === "plus" ? "telegram+whatsapp" :
+        "all";
+
+      const res = await fetch("https://clawolution.com/api/agentos247/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          plan,
-          billing,
-          months,
-          price: monthlyPrice,
-          total: totalDue,
-          agentName: agentName.trim(),
-          telegramId: telegramId.trim(),
           email: email.trim(),
-          role,
-          source: "main",
+          plan,
+          type: "instant",
+          duration: months,
+          channel,
+          agent_name: agentName.trim() || undefined,
         }),
       });
 
@@ -107,7 +108,7 @@ export function AgentCheckoutDialog({
     } finally {
       setLoading(false);
     }
-  }, [loading, agreed, email, telegramId, plan, billing, months, monthlyPrice, totalDue, agentName, role]);
+  }, [loading, agreed, email, telegramId, plan, months, agentName]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

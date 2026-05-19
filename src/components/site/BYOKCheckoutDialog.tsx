@@ -70,27 +70,22 @@ export function BYOKCheckoutDialog({
     try {
       const billingInfo = BILLING.find((b) => b.id === billing)!;
       const months = billingInfo.id === "1m" ? 1 : billingInfo.id === "12m" ? 12 : 24;
-      const price = months === 1 ? planPrice : Math.round(selectedPlan.monthly * billingInfo.mult);
 
-      const res = await fetch("/api/agentos247/checkout", {
+      const res = await fetch("https://clawolution.com/api/agentos247/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          plan: plan,
-          billing: billing,
-          months,
-          price,
-          total,
-          guardian,
-          agentName: agentName.trim(),
-          gender,
-          telegramId: telegramId.trim(),
-          apiKey: apiKey.trim(),
           email: email.trim(),
-          source: "byok",
+          plan: plan,
+          type: "byok",
+          duration: months,
+          channel: "telegram",
+          api_key: apiKey.trim() || undefined,
+          agent_name: agentName.trim() || undefined,
+          dante: guardian,
         }),
       });
 
@@ -114,7 +109,7 @@ export function BYOKCheckoutDialog({
     } finally {
       setLoading(false);
     }
-  }, [loading, email, agreed, billing, planPrice, selectedPlan, plan, total, guardian, agentName, gender, telegramId, apiKey]);
+  }, [loading, email, agreed, billing, plan, guardian, agentName, apiKey]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
