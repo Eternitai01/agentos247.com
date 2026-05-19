@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 
 const PLANS: { id: PlanId; name: string; channel: string; monthly: number; discounted: number; monthly12: number; monthly24: number; highlight?: boolean }[] = [
@@ -52,6 +53,7 @@ export function AgentCheckoutDialog({
   const [telegramId, setTelegramId] = useState("");
   const [agentName, setAgentName] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const billingInfo = BILLING.find((b) => b.id === billing);
   const priceKey = billingInfo?.priceKey ?? "discounted";
@@ -59,6 +61,53 @@ export function AgentCheckoutDialog({
   const selectedPlan = PLANS.find((p) => p.id === plan);
   const monthlyPrice = selectedPlan?.[priceKey] ?? 0;
   const totalDue = monthlyPrice * months;
+
+  const handleCheckout = useCallback(async () => {
+    if (loading) return;
+    if (!agreed || !email || !telegramId) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/agentos247/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          plan,
+          billing,
+          months,
+          price: monthlyPrice,
+          total: totalDue,
+          agentName: agentName.trim(),
+          telegramId: telegramId.trim(),
+          email: email.trim(),
+          role,
+          source: "main",
+        }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || `API error ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        throw new Error("No checkout URL in response");
+      }
+    } catch (err) {
+      console.error("[Checkout Error]", err);
+      alert(err instanceof Error ? err.message : "Checkout failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, agreed, email, telegramId, plan, billing, months, monthlyPrice, totalDue, agentName, role]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -190,10 +239,15 @@ export function AgentCheckoutDialog({
             {t("Cancel")}
           </button>
           <button
-            disabled={!agreed || !email || !telegramId}
+            disabled={!agreed || !email || !telegramId || loading}
+            onClick={handleCheckout}
             className="flex-[2] rounded-md bg-primary text-primary-foreground px-3 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t("Continue to payment")}
+            {loading ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> {t("Processing...")}</>
+            ) : (
+              <>{t("Continue to payment")}</>
+            )}
           </button>
         </div>
       </DialogContent>

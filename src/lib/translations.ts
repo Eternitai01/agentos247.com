@@ -568,4 +568,7 @@ export const translations: Record<string, string> = {
     "Diseño de prompts, fine-tuning, evaluación.",
 
   "No roles match": "Ningún rol coincide con",
+
+  // Checkout
+  "Processing...": "Procesando...",
 };

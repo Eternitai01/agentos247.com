@@ -100,13 +100,112 @@ async function handleLeadCapture(request: Request): Promise<Response> {
   }
 }
 
+// Handle BYOK checkout — creates Stripe Checkout Session or proxies to backend
+async function handleCheckout(request: Request): Promise<Response> {
+  try {
+    const body = await request.json();
+    console.log("[CHECKOUT]", JSON.stringify(body));
+
+    // Determine the origin for success/cancel URLs
+    const url = new URL(request.url);
+    const origin = url.origin;
+
+    const STRIPE_KEY = (typeof process !== "undefined" && (process as any).env?.STRIPE_SECRET_KEY) 
+      || (globalThis as any).STRIPE_SECRET_KEY;
+
+    if (STRIPE_KEY) {
+      // Create Stripe Checkout Session directly via API
+      const params = new URLSearchParams();
+      params.set("mode", "payment");
+      params.set("success_url", `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
+      params.set("cancel_url", `${origin}${body.source === "byok" ? "/byok" : ""}#pricing`);
+      params.set("customer_email", (body.email || "") as string);
+      params.set("line_items[0][price_data][currency]", "eur");
+      params.set(
+        "line_items[0][price_data][product_data][name]",
+        `AgentOS247 ${body.source === "byok" ? "BYOK" : ""} - ${body.plan}` as string,
+      );
+      params.set("line_items[0][price_data][product_data][metadata][plan]", body.plan as string);
+      params.set("line_items[0][price_data][product_data][metadata][billing]", body.billing as string);
+      params.set("line_items[0][price_data][unit_amount]", `${Math.round(Number(body.price) * 100)}`);
+      params.set("line_items[0][quantity]", "1");
+
+      const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${STRIPE_KEY}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+      });
+
+      const session = await stripeRes.json<any>();
+
+      if (!stripeRes.ok) {
+        return new Response(
+          JSON.stringify({ error: session.error?.message || "Stripe error" }),
+          { status: stripeRes.status, headers: { "content-type": "application/json" } },
+        );
+      }
+
+      // Forward order details to hooks endpoint
+      try {
+        await fetch("http://localhost:18789/hooks/agent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer hooks-o3zWBFPMhc4mGD06yK37EDpuVKmzarlA",
+          },
+          body: JSON.stringify({
+            type: "order_created",
+            payload: { ...body, stripeSessionId: session.id },
+          }),
+        }).catch(() => {});
+      } catch {
+        // silently fail
+      }
+
+      return new Response(JSON.stringify({ url: session.url }), {
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    return new Response(
+      JSON.stringify({ error: "Checkout not configured (missing STRIPE_SECRET_KEY)." }),
+      { status: 501, headers: { "content-type": "application/json" } },
+    );
+  } catch (err) {
+    console.error("[CHECKOUT]", err);
+    return new Response(JSON.stringify({ error: "Internal error" }), {
+      status: 500,
+      headers: { "content-type": "application/json" },
+    });
+  }
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
-      // Handle API routes first
       const url = new URL(request.url);
+
+      // CORS preflight
+      if (request.method === "OPTIONS") {
+        return new Response(null, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        });
+      }
+
+      // Handle API routes
       if (url.pathname === "/api/lead" && request.method === "POST") {
         return await handleLeadCapture(request);
+      }
+
+      if (url.pathname === "/api/agentos247/checkout" && request.method === "POST") {
+        return await handleCheckout(request);
       }
 
       const handler = await getServerEntry();

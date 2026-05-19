@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 
 const PLANS = [
@@ -48,11 +48,13 @@ export function BYOKCheckoutDialog({
   const [apiKey, setApiKey] = useState("");
   const [email, setEmail] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (open) {
       setBilling(initialBilling);
       setPlan(initialPlan);
+      setLoading(false);
     }
   }, [open, initialBilling, initialPlan]);
 
@@ -60,6 +62,59 @@ export function BYOKCheckoutDialog({
   const selectedPlan = PLANS.find((p) => p.id === plan)!;
   const planPrice = Math.round(selectedPlan.monthly * mult);
   const total = useMemo(() => planPrice + (guardian ? GUARDIAN_PRICE : 0), [planPrice, guardian]);
+
+  const handleCheckout = useCallback(async () => {
+    if (loading) return;
+    if (!email || !agreed) return;
+    setLoading(true);
+    try {
+      const billingInfo = BILLING.find((b) => b.id === billing)!;
+      const months = billingInfo.id === "1m" ? 1 : billingInfo.id === "12m" ? 12 : 24;
+      const price = months === 1 ? planPrice : Math.round(selectedPlan.monthly * billingInfo.mult);
+
+      const res = await fetch("/api/agentos247/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          plan: plan,
+          billing: billing,
+          months,
+          price,
+          total,
+          guardian,
+          agentName: agentName.trim(),
+          gender,
+          telegramId: telegramId.trim(),
+          apiKey: apiKey.trim(),
+          email: email.trim(),
+          source: "byok",
+        }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || `API error ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        throw new Error("No checkout URL in response");
+      }
+    } catch (err) {
+      console.error("[Checkout Error]", err);
+      alert(err instanceof Error ? err.message : "Checkout failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, email, agreed, billing, planPrice, selectedPlan, plan, total, guardian, agentName, gender, telegramId, apiKey]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -239,10 +294,15 @@ export function BYOKCheckoutDialog({
           </label>
 
           <button
-            disabled={!email || !agreed}
+            disabled={!email || !agreed || loading}
+            onClick={handleCheckout}
             className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-4 py-2.5 text-sm font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t("Continue to payment")} <ArrowRight className="h-4 w-4" />
+            {loading ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> {t("Processing...")}</>
+            ) : (
+              <>{t("Continue to payment")} <ArrowRight className="h-4 w-4" /></>
+            )}
           </button>
         </div>
       </DialogContent>
