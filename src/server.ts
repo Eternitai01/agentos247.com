@@ -50,8 +50,6 @@ function isCatastrophicSsrErrorBody(body: string, responseStatus: number): boole
   );
 }
 
-// h3 swallows in-handler throws into a normal 500 Response with body
-// {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
@@ -72,13 +70,12 @@ async function handleLeadCapture(request: Request): Promise<Response> {
     const lead = await request.json();
     console.log("[LEAD CAPTURE]", JSON.stringify(lead));
 
-    // Forward to hooks endpoint for processing
     try {
       await fetch("http://localhost:18789/hooks/agent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer hooks-o3zWBFPMhc4mGD06yK37EDpuVKmzarlA",
+          Authorization: "Bearer …-…",
         },
         body: JSON.stringify({
           type: "lead_capture",
@@ -100,69 +97,115 @@ async function handleLeadCapture(request: Request): Promise<Response> {
   }
 }
 
-// Handle BYOK checkout — creates Stripe Checkout Session or proxies to backend
-async function handleCheckout(request: Request): Promise<Response> {
-  try {
-    const body = await request.json();
-    console.log("[CHECKOUT]", JSON.stringify(body));
+// ── Checkout handler: direct Stripe integration ──────────────────────────
 
-    // Determine the origin for success/cancel URLs
+// Price table (EUR, in cents) — must match AgentCheckoutDialog.tsx PLANS
+const PLAN_PRICES: Record<string, Record<number, number>> = {
+  basic:  { 1: 9000,  12: 6500,  24: 4900  },
+  plus:   { 1: 11000, 12: 7900,  24: 5900  },
+  elite:  { 1: 27600, 12: 19900, 24: 14900 },
+};
+
+const BYOK_PRICES: Record<string, Record<number, number>> = {
+  starter:  { 1: 5400, 12: 3900, 24: 2900 },
+  pro:      { 1: 9100, 12: 6600, 24: 4900 },
+  business: { 1: 18400, 12: 13300, 24: 10000 },
+};
+
+const DANTE_PRICE = 1900; // EUR cents
+
+async function handleCheckout(request: Request, env: any): Promise<Response> {
+  try {
+    const rawBody = await request.json();
+    console.log("[WORKER CHECKOUT]", JSON.stringify(rawBody));
+
     const url = new URL(request.url);
     const origin = url.origin;
 
-    const STRIPE_KEY = (typeof process !== "undefined" && (process as any).env?.STRIPE_SECRET_KEY) 
-      || (globalThis as any).STRIPE_SECRET_KEY;
+    // Extract fields — supports both old and new body formats
+    const plan = String(rawBody.plan || "plus");
+    const isByok = rawBody.source === "byok" || rawBody.type === "byok";
+    const duration = Number(rawBody.duration || rawBody.months || 1);
+    const email = String(rawBody.email || "");
+    const agentName = String(rawBody.agent_name || rawBody.agentName || "");
+    const channel = String(rawBody.channel || "telegram");
+    const dante = Boolean(rawBody.dante || rawBody.guardian || false);
 
-    if (STRIPE_KEY) {
-      // Create Stripe Checkout Session directly via API
+    // Look up the MONTHLY price in cents
+    const priceTable = isByok ? BYOK_PRICES : PLAN_PRICES;
+    const planPrices = priceTable[plan];
+    if (!planPrices) {
+      return new Response(
+        JSON.stringify({ error: `Unknown plan: ${plan}` }),
+        { status: 400, headers: { "content-type": "application/json" } },
+      );
+    }
+
+    const monthlyCents = planPrices[duration] || planPrices[1];
+    if (!monthlyCents) {
+      return new Response(
+        JSON.stringify({ error: `No price for plan=${plan} duration=${duration}` }),
+        { status: 400, headers: { "content-type": "application/json" } },
+      );
+    }
+
+    // Multiply monthly price by duration to get total amount (cents)
+    const totalCents = (monthlyCents * duration) + (dante ? DANTE_PRICE * duration : 0);
+    const durationLabel = duration === 1 ? "monthly" : duration === 12 ? "annually" : "biennially";
+
+    // Build product name for Stripe invoice
+    const productName = `AgentOS247 ${isByok ? "BYOK" : ""} — ${plan} (${duration} month${duration > 1 ? "s" : ""})`;
+
+    const stripeKey = env?.STRIPE_SECRET_KEY || (globalThis as any).STRIPE_SECRET_KEY;
+
+    if (stripeKey) {
       const params = new URLSearchParams();
       params.set("mode", "payment");
-      params.set("success_url", `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
-      params.set("cancel_url", `${origin}${body.source === "byok" ? "/byok" : ""}#pricing`);
-      params.set("customer_email", (body.email || "") as string);
+      params.set(
+        "success_url",
+        `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      );
+      // cancel_url goes back to the pricing section on agentos247.com
+      params.set(
+        "cancel_url",
+        `${origin}${isByok ? "/byok" : ""}#pricing`,
+      );
+      params.set("customer_email", email);
       params.set("line_items[0][price_data][currency]", "eur");
       params.set(
         "line_items[0][price_data][product_data][name]",
-        `AgentOS247 ${body.source === "byok" ? "BYOK" : ""} - ${body.plan}` as string,
+        productName,
       );
-      params.set("line_items[0][price_data][product_data][metadata][plan]", body.plan as string);
-      params.set("line_items[0][price_data][product_data][metadata][billing]", body.billing as string);
-      params.set("line_items[0][price_data][unit_amount]", `${Math.round(Number(body.price) * 100)}`);
+      params.set("line_items[0][price_data][product_data][metadata][plan]", plan);
+      params.set("line_items[0][price_data][product_data][metadata][billing]", durationLabel);
+      params.set("line_items[0][price_data][unit_amount]", String(totalCents));
       params.set("line_items[0][quantity]", "1");
 
-      const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${STRIPE_KEY}`,
-          "Content-Type": "application/x-www-form-urlencoded",
+      const stripeRes = await fetch(
+        "https://api.stripe.com/v1/checkout/sessions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${stripeKey}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params.toString(),
         },
-        body: params.toString(),
-      });
+      );
 
-      const session = await stripeRes.json<any>();
+      const session = (await stripeRes.json()) as {
+        url?: string;
+        error?: { message: string };
+      };
 
       if (!stripeRes.ok) {
         return new Response(
           JSON.stringify({ error: session.error?.message || "Stripe error" }),
-          { status: stripeRes.status, headers: { "content-type": "application/json" } },
-        );
-      }
-
-      // Forward order details to hooks endpoint
-      try {
-        await fetch("http://localhost:18789/hooks/agent", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer hooks-o3zWBFPMhc4mGD06yK37EDpuVKmzarlA",
+          {
+            status: stripeRes.status,
+            headers: { "content-type": "application/json" },
           },
-          body: JSON.stringify({
-            type: "order_created",
-            payload: { ...body, stripeSessionId: session.id },
-          }),
-        }).catch(() => {});
-      } catch {
-        // silently fail
+        );
       }
 
       return new Response(JSON.stringify({ url: session.url }), {
@@ -170,12 +213,30 @@ async function handleCheckout(request: Request): Promise<Response> {
       });
     }
 
-    return new Response(
-      JSON.stringify({ error: "Checkout not configured (missing STRIPE_SECRET_KEY)." }),
-      { status: 501, headers: { "content-type": "application/json" } },
-    );
+    // ⚠️ FALLBACK: Send calculated price to clawolution.com Express backend.
+    // The backend may use the `price` and `total` fields if it accepts them.
+    const monthlyPrice = monthlyCents / 100;
+    const totalPrice = totalCents / 100;
+    const enrichedBody = {
+      ...rawBody,
+      price: String(monthlyPrice),
+      total: String(totalPrice),
+    };
+    const FALLBACK = "https://clawolution.com/api/agentos247/checkout";
+    console.log("[WORKER CHECKOUT] No Stripe key — proxying to", FALLBACK, "with total=", totalPrice);
+    const response = await fetch(FALLBACK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(enrichedBody),
+    });
+
+    const data = await response.json<any>();
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: { "content-type": "application/json" },
+    });
   } catch (err) {
-    console.error("[CHECKOUT]", err);
+    console.error("[WORKER CHECKOUT ERROR]", err);
     return new Response(JSON.stringify({ error: "Internal error" }), {
       status: 500,
       headers: { "content-type": "application/json" },
@@ -205,7 +266,7 @@ export default {
       }
 
       if (url.pathname === "/api/agentos247/checkout" && request.method === "POST") {
-        return await handleCheckout(request);
+        return await handleCheckout(request, env);
       }
 
       const handler = await getServerEntry();

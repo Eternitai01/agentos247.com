@@ -10,7 +10,7 @@ import { useT } from "@/lib/i18n";
 
 const PLANS: { id: PlanId; name: string; channel: string; monthly: number; discounted: number; monthly12: number; monthly24: number; highlight?: boolean }[] = [
   { id: "basic", name: "Basic", channel: "Telegram", monthly: 180, discounted: 90, monthly12: 65, monthly24: 49 },
-  { id: "plus", name: "Plus", channel: "Telegram + WhatsApp", monthly: 219, discounted: 109, monthly12: 79, monthly24: 59, highlight: true },
+  { id: "plus", name: "Plus", channel: "Telegram + WhatsApp", monthly: 219, discounted: 110, monthly12: 79, monthly24: 59, highlight: true },
   { id: "elite", name: "Elite", channel: "All channels", monthly: 552, discounted: 276, monthly12: 199, monthly24: 149 },
 ];
 
@@ -72,7 +72,7 @@ export function AgentCheckoutDialog({
         plan === "plus" ? "telegram+whatsapp" :
         "all";
 
-      const res = await fetch("https://clawolution.com/api/agentos247/checkout", {
+      const res = await fetch("/api/agentos247/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

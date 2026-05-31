@@ -1,22 +1,23 @@
 // Cloudflare Pages Function — handles POST /api/agentos247/checkout
-// This runs when deployed to Cloudflare Pages (not Workers).
-// Falls back to the Workers entrypoint (src/server.ts) when deployed as Worker.
+// Supports BOTH the old clawolution-proxy body format AND the new direct format.
+// Deploy to Cloudflare Pages with STRIPE_SECRET_KEY env var set.
 
-interface CheckoutBody {
-  plan: string;
-  billing: string;
-  months: number;
-  price: number;
-  total: number;
-  guardian?: boolean;
-  agentName?: string;
-  gender?: string;
-  telegramId?: string;
-  apiKey?: string;
-  email: string;
-  role?: string | null;
-  source: string;
-}
+// Price table (EUR, in cents) — must match AgentCheckoutDialog.tsx PLANS
+const PLAN_PRICES: Record<string, Record<number, number>> = {
+  basic:  { 1: 9000,  12: 6500,  24: 4900  },
+  plus:   { 1: 11000, 12: 7900,  24: 5900  },
+  elite:  { 1: 27600, 12: 19900, 24: 14900 },
+};
+
+// BYOK price table (EUR, in cents)
+const BYOK_PRICES: Record<string, Record<number, number>> = {
+  starter:  { 1: 5400, 12: 3900, 24: 2900 },
+  pro:      { 1: 9100, 12: 6600, 24: 4900 },
+  business: { 1: 18400, 12: 13300, 24: 10000 },
+};
+
+// Optional Dante Guardian add-on (EUR, in cents)
+const DANTE_PRICE = 1900;
 
 interface Env {
   STRIPE_SECRET_KEY?: string;
@@ -51,40 +52,75 @@ export async function onRequest(context: {
   }
 
   try {
-    const body = (await request.json()) as CheckoutBody;
-    console.log("[PAGES CHECKOUT]", JSON.stringify(body));
+    const rawBody = await request.json();
+    console.log("[PAGES CHECKOUT]", JSON.stringify(rawBody));
 
     const url = new URL(request.url);
     const origin = url.origin;
 
+    // Extract fields — support both old and new body formats
+    const plan = String(rawBody.plan || "plus");
+    const isByok = rawBody.source === "byok" || rawBody.type === "byok";
+    const duration = Number(rawBody.duration || rawBody.months || 1);
+    const email = String(rawBody.email || "");
+    const agentName = String(rawBody.agent_name || rawBody.agentName || "");
+    const channel = String(rawBody.channel || "telegram");
+    const dante = Boolean(rawBody.dante || rawBody.guardian || false);
+
+    // Look up the MONTHLY price in cents (not the total)
+    const priceTable = isByok ? BYOK_PRICES : PLAN_PRICES;
+    const planPrices = priceTable[plan];
+    if (!planPrices) {
+      return new Response(
+        JSON.stringify({ error: `Unknown plan: ${plan}` }),
+        { status: 400, headers: { "content-type": "application/json" } },
+      );
+    }
+
+    const monthlyCents = planPrices[duration] || planPrices[1];
+    if (!monthlyCents) {
+      return new Response(
+        JSON.stringify({ error: `No price for plan=${plan} duration=${duration}` }),
+        { status: 400, headers: { "content-type": "application/json" } },
+      );
+    }
+
+    // ⚠️ CRITICAL FIX: multiply monthly price by duration to get total amount
+    const totalCents = (monthlyCents * duration) + (dante ? DANTE_PRICE * duration : 0);
+
+    // Build product name
+    const productName = `AgentOS247 ${isByok ? "BYOK" : ""} — ${plan} (${duration} month${duration > 1 ? "s" : ""})`;
+    const durationLabel = duration === 1 ? "monthly" : duration === 12 ? "annually" : "biennially";
+
     const stripeKey = env.STRIPE_SECRET_KEY || (globalThis as any).STRIPE_SECRET_KEY;
 
     if (stripeKey) {
-      // Create Stripe Checkout Session
       const params = new URLSearchParams();
       params.set("mode", "payment");
       params.set(
         "success_url",
         `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       );
+      // ✅ FIXED: cancel_url points to valid page
       params.set(
         "cancel_url",
-        `${origin}${body.source === "byok" ? "/byok" : ""}#pricing`,
+        `${origin}${isByok ? "/byok" : ""}#pricing`,
       );
-      params.set("customer_email", body.email || "");
+      params.set("customer_email", email);
       params.set("line_items[0][price_data][currency]", "eur");
       params.set(
         "line_items[0][price_data][product_data][name]",
-        `AgentOS247 ${body.source === "byok" ? "BYOK" : ""} - ${body.plan}`,
+        productName,
       );
-      params.set("line_items[0][price_data][product_data][metadata][plan]", body.plan);
+      params.set("line_items[0][price_data][product_data][metadata][plan]", plan);
       params.set(
         "line_items[0][price_data][product_data][metadata][billing]",
-        body.billing,
+        durationLabel,
       );
+      // ✅ FIXED: unit_amount = monthly price × duration (total amount in cents)
       params.set(
         "line_items[0][price_data][unit_amount]",
-        `${Math.round(Number(body.price) * 100)}`,
+        String(totalCents),
       );
       params.set("line_items[0][quantity]", "1");
 
@@ -100,7 +136,10 @@ export async function onRequest(context: {
         },
       );
 
-      const session = (await stripeRes.json()) as { url?: string; error?: { message: string } };
+      const session = (await stripeRes.json()) as {
+        url?: string;
+        error?: { message: string };
+      };
 
       if (!stripeRes.ok) {
         return new Response(
@@ -127,7 +166,7 @@ export async function onRequest(context: {
             ? { Authorization: `Bearer ${env.CHECKOUT_API_KEY}` }
             : {}),
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(rawBody),
       });
 
       const proxyData = await proxyRes.json();

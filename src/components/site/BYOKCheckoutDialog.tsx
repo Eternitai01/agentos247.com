@@ -71,7 +71,7 @@ export function BYOKCheckoutDialog({
       const billingInfo = BILLING.find((b) => b.id === billing)!;
       const months = billingInfo.id === "1m" ? 1 : billingInfo.id === "12m" ? 12 : 24;
 
-      const res = await fetch("https://clawolution.com/api/agentos247/checkout", {
+      const res = await fetch("/api/agentos247/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
