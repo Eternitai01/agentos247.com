@@ -124,6 +124,20 @@ export async function onRequest(context: {
       );
       params.set("line_items[0][quantity]", "1");
 
+      // Session-level metadata — read by clawolution.com/webhook after payment
+      params.set("metadata[plan]", plan);
+      params.set("metadata[type]", isByok ? "byok" : "instant");
+      params.set("metadata[source]", "agentos247");
+      params.set("metadata[channel]", channel);
+      params.set("metadata[agent_name]", agentName || "Alex");
+      params.set("metadata[duration]", String(duration));
+      if (rawBody.telegram_user_id) {
+        params.set("metadata[telegram_user_id]", String(rawBody.telegram_user_id));
+      }
+      if (dante) {
+        params.set("metadata[dante]", "true");
+      }
+
       const stripeRes = await fetch(
         "https://api.stripe.com/v1/checkout/sessions",
         {

@@ -85,6 +85,7 @@ export function AgentCheckoutDialog({
           duration: months,
           channel,
           agent_name: agentName.trim() || undefined,
+          telegram_user_id: telegramId.trim() || undefined,
         }),
       });
 
