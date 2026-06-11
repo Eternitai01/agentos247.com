@@ -208,6 +208,91 @@ function HowItWorks() {
 
 function Roles() {
   const { t } = useT();
+  const AVATAR_BASE = 'https://ai2me-images-production-us-east-1.s3.us-east-1.amazonaws.com/agentos247/avatars';
+  const roleAvatars: Record<string, string> = {
+    'Executive Assistant': 'executive-assistant',
+    'Business Advisor': 'strategy-consultant',
+    'Financial Coach': 'financial-planner',
+    'Personal Trainer': 'life-coach',
+    'Nutritionist': 'healthcare-coordinator',
+    'Personal Tutor': 'training-specialist',
+    'Sports Coach': 'executive-coach',
+    'Science Expert': 'research-analyst',
+    'CEO Advisor': 'chief-of-staff',
+    'Marketing Strategist': 'marketing-manager',
+    'Sales Coach': 'sales-representative',
+    'HR Consultant': 'hr-manager',
+    'Legal Advisor': 'legal-counsel',
+    'Project Manager': 'project-manager',
+    'Startup Mentor': 'strategy-consultant',
+    'Therapist Companion': 'life-coach',
+    'Relationship Coach': 'life-coach',
+    'Health Companion': 'healthcare-coordinator',
+    'Wellness Guide': 'life-coach',
+    'Software Engineer': 'software-engineer',
+    'Designer': 'ux-designer',
+    'Photography Coach': 'content-strategist',
+    'Music Tutor': 'training-specialist',
+    'Writing Coach': 'technical-writer',
+    'Copywriter': 'copywriter',
+    'Language Teacher': 'training-specialist',
+    'Travel Planner': 'executive-assistant',
+    'Frequent Flyer': 'account-executive',
+    'Real Estate Advisor': 'real-estate-agent',
+    'Auto Expert': 'operations-manager',
+    'Personal Shopper': 'account-executive',
+    'Chef': 'training-specialist',
+    'Barista': 'training-specialist',
+    'Parenting Coach': 'life-coach',
+    'Pet Care Advisor': 'life-coach',
+    'Volunteer Coordinator': 'community-manager',
+    'Creative Director': 'brand-manager',
+    'Innovation Coach': 'executive-coach',
+    'Productivity Coach': 'executive-coach',
+    'Career Coach': 'executive-coach',
+    'Public Speaking Coach': 'executive-coach',
+    'YouTube Strategist': 'social-media-manager',
+    'Filmmaker': 'video-producer',
+    'Journalist': 'content-strategist',
+    'Email Manager': 'email-marketer',
+    'Scheduler': 'executive-assistant',
+    'Document Drafter': 'technical-writer',
+    'Operations Lead': 'operations-manager',
+    'Data Analyst': 'data-analyst',
+    'Market Researcher': 'research-analyst',
+    'Accountant': 'accountant',
+    'Tax Advisor': 'tax-specialist',
+    'Property Manager': 'real-estate-agent',
+    'Manufacturing Lead': 'operations-manager',
+    'Logistics Coordinator': 'logistics-coordinator',
+    'Contractor Helper': 'operations-manager',
+    'Handyman Advisor': 'operations-manager',
+    'Construction Planner': 'operations-manager',
+    'Boating Expert': 'executive-coach',
+    'Adventure Guide': 'life-coach',
+    'Local Guide': 'community-manager',
+    'Climbing Coach': 'life-coach',
+    'Cycling Coach': 'life-coach',
+    'Swim Coach': 'life-coach',
+    'Camping Expert': 'life-coach',
+    'Gaming Coach': 'training-specialist',
+    'Puzzle Master': 'research-analyst',
+    'Acting Coach': 'training-specialist',
+    'Storyteller': 'content-strategist',
+    'Researcher': 'research-analyst',
+    'Study Buddy': 'training-specialist',
+    'Lab Assistant': 'research-analyst',
+    'Physics Tutor': 'research-analyst',
+    'Astronomy Guide': 'research-analyst',
+    'QA Engineer': 'qa-engineer',
+    'Hardware Engineer': 'backend-developer',
+    'DevOps Engineer': 'devops-engineer',
+    'Database Architect': 'database-administrator',
+    'Cloud Architect': 'cloud-architect',
+    'Mobile Developer': 'mobile-developer',
+    'Network Engineer': 'network-engineer',
+    'AI Engineer': 'ai-engineer',
+  };
   const roles: { icon: any; name: string; desc: string }[] = [
     { icon: Briefcase, name: "Executive Assistant", desc: "Manages your schedule, drafts messages, keeps you organized." },
     { icon: TrendingUp, name: "Business Advisor", desc: "Strategy, pricing, marketing, honest feedback." },
@@ -326,8 +411,22 @@ function Roles() {
               <button
                 key={r.name}
                 onClick={() => setOpenRole(r.name)}
-                className="text-left rounded-2xl border border-border bg-background p-6 hover:border-foreground/40 transition-colors"
+                className="text-left rounded-2xl border border-border bg-background p-6 hover:border-foreground/40 transition-colors relative overflow-hidden"
               >
+                {roleAvatars[r.name] && (
+                  <div className="absolute top-4 right-4 flex gap-1">
+                    <img
+                      src={`${AVATAR_BASE}/${roleAvatars[r.name]}-female.jpg`}
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-background"
+                    />
+                    <img
+                      src={`${AVATAR_BASE}/${roleAvatars[r.name]}-male.jpg`}
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-background -ml-2"
+                    />
+                  </div>
+                )}
                 <Icon className="h-7 w-7 text-accent-blue" />
                 <h3 className="mt-4 text-lg font-bold">{t(r.name)}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{t(r.desc)}</p>
