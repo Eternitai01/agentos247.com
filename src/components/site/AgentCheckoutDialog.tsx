@@ -52,6 +52,7 @@ export function AgentCheckoutDialog({
   const [email, setEmail] = useState("");
   const [telegramId, setTelegramId] = useState("");
   const [agentName, setAgentName] = useState("");
+  const [agentGender, setAgentGender] = useState<"female" | "male">("female");
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -64,7 +65,7 @@ export function AgentCheckoutDialog({
 
   const handleCheckout = useCallback(async () => {
     if (loading) return;
-    if (!agreed || !email || !telegramId) return;
+    if (!agreed || !email || !telegramId || !agentName.trim()) return;
     setLoading(true);
     try {
       const channel =
@@ -84,7 +85,8 @@ export function AgentCheckoutDialog({
           type: "instant",
           duration: months,
           channel,
-          agent_name: agentName.trim() || undefined,
+          agent_name: agentName.trim(),
+          agent_gender: agentGender,
           telegram_user_id: telegramId.trim() || undefined,
         }),
       });
@@ -195,16 +197,41 @@ export function AgentCheckoutDialog({
               {t("Open")} <a className="text-accent-blue" href="https://t.me/chatid_echo_bot" target="_blank" rel="noreferrer">@chatid_echo_bot</a> {t("in Telegram to get your ID")}
             </p>
           </div>
-          <div>
-            <label className="text-xs font-semibold">
-              {t("Agent name")} <span className="text-muted-foreground font-normal">{t("(optional)")}</span>
-            </label>
-            <input
-              value={agentName}
-              onChange={(e) => setAgentName(e.target.value)}
-              placeholder="e.g. Alex, Sofia, Max..."
-              className="mt-0.5 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:outline-none focus:border-primary"
-            />
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-xs font-semibold">
+                {t("Agent name")} <span className="text-destructive">*</span>
+              </label>
+              <input
+                required
+                value={agentName}
+                onChange={(e) => setAgentName(e.target.value)}
+                placeholder="Alex, Sofia..."
+                className="mt-0.5 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold">
+                {t("Voice")} <span className="text-destructive">*</span>
+              </label>
+              <div className="mt-0.5 grid grid-cols-2 gap-1">
+                {(["female", "male"] as const).map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setAgentGender(g)}
+                    className={`flex items-center justify-center gap-1 rounded-md border px-2 py-2 text-xs font-semibold transition-colors ${
+                      agentGender === g
+                        ? "border-primary bg-primary/5 text-foreground"
+                        : "border-border text-muted-foreground hover:border-foreground/30"
+                    }`}
+                  >
+                    <span>{g === "female" ? "👩" : "👨"}</span>
+                    <span className="capitalize">{t(g === "female" ? "Female" : "Male")}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <label className="flex items-start gap-2 text-xs">
             <input
@@ -241,7 +268,7 @@ export function AgentCheckoutDialog({
             {t("Cancel")}
           </button>
           <button
-            disabled={!agreed || !email || !telegramId || loading}
+            disabled={!agreed || !email || !telegramId || !agentName.trim() || loading}
             onClick={handleCheckout}
             className="flex-[2] rounded-md bg-primary text-primary-foreground px-3 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
