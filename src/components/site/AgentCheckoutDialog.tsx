@@ -52,7 +52,6 @@ export function AgentCheckoutDialog({
   const [email, setEmail] = useState("");
   const [telegramId, setTelegramId] = useState("");
   const [agentName, setAgentName] = useState("");
-  const [agentGender, setAgentGender] = useState<"female" | "male">("female");
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -87,7 +86,6 @@ export function AgentCheckoutDialog({
           channel,
           agent_name: agentName.trim() || undefined,
           telegram_user_id: telegramId.trim() || undefined,
-          agent_gender: agentGender,
         }),
       });
 
@@ -207,26 +205,6 @@ export function AgentCheckoutDialog({
               placeholder="e.g. Alex, Sofia, Max..."
               className="mt-0.5 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
-          </div>
-          <div>
-            <label className="text-xs font-semibold">{t("Agent voice")}</label>
-            <div className="mt-1 grid grid-cols-2 gap-2">
-              {(["female", "male"] as const).map((g) => (
-                <button
-                  key={g}
-                  type="button"
-                  onClick={() => setAgentGender(g)}
-                  className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors ${
-                    agentGender === g
-                      ? "border-primary bg-primary/5 text-foreground"
-                      : "border-border text-muted-foreground hover:border-foreground/30"
-                  }`}
-                >
-                  <span className="text-base">{g === "female" ? "👩" : "👨"}</span>
-                  <span className="capitalize">{t(g === "female" ? "Female" : "Male")}</span>
-                </button>
-              ))}
-            </div>
           </div>
           <label className="flex items-start gap-2 text-xs">
             <input

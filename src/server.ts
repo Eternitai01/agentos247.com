@@ -128,7 +128,6 @@ async function handleCheckout(request: Request, env: any): Promise<Response> {
     const duration = Number(rawBody.duration || rawBody.months || 1);
     const email = String(rawBody.email || "");
     const agentName = String(rawBody.agent_name || rawBody.agentName || "");
-    const agentGender = String(rawBody.agent_gender || "female");
     const channel = String(rawBody.channel || "telegram");
     const dante = Boolean(rawBody.dante || rawBody.guardian || false);
 
@@ -180,13 +179,6 @@ async function handleCheckout(request: Request, env: any): Promise<Response> {
       params.set("line_items[0][price_data][product_data][metadata][plan]", plan);
       params.set("line_items[0][price_data][product_data][metadata][billing]", durationLabel);
       params.set("line_items[0][price_data][unit_amount]", String(totalCents));
-      // Top-level session metadata — readable from checkout.session.completed
-      params.set("metadata[agent_gender]", agentGender);
-      params.set("metadata[agent_name]", agentName);
-      params.set("metadata[plan]", plan);
-      params.set("metadata[duration]", String(duration));
-      params.set("metadata[channel]", channel);
-      if (email) params.set("metadata[email]", email);
       params.set("line_items[0][quantity]", "1");
 
       const stripeRes = await fetch(
