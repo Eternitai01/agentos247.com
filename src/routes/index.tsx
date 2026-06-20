@@ -49,6 +49,7 @@ const PLANS = [
       "500 conversations/month",
       "Telegram agent",
       "80+ professional roles",
+      "One-tap Gmail \u0026 Calendar connect",
       "Persistent memory & knowledge base",
       "AI agent initiation guide",
       "Constant OpenClaw updates & improvements",
