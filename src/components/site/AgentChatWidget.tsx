@@ -187,7 +187,7 @@ export function AgentChatWidget() {
 
       {/* Floating button */}
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen(prev => !prev)}
         className="fixed bottom-6 right-6 z-[99998] w-16 h-16 rounded-full cursor-pointer flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
         style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
         aria-label="Chat with AgentOS 24/7"
