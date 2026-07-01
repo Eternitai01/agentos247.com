@@ -19,7 +19,7 @@ import {
   Library, School, Microscope, Atom, Telescope, Bug, Cpu,
   Server, Database, Cloud, Smartphone, Wifi, Bot, Search,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -461,6 +461,20 @@ function Pricing() {
     "12m": "annual",
     "24m": "2y",
   };
+
+  // Auto-open checkout dialog from URL params (e.g. ?plan=basic&billing=monthly)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const planParam = params.get("plan") as PlanId | null;
+    const billingParam = params.get("billing");
+    if (planParam && ["basic", "plus", "elite"].includes(planParam)) {
+      if (billingParam === "annual") setBilling("12m");
+      else if (billingParam === "2y") setBilling("24m");
+      else if (billingParam === "monthly") setBilling("1m");
+      // Small delay to let the page render first
+      setTimeout(() => setCheckoutPlan(planParam), 300);
+    }
+  }, []);
 
   return (
     <section id="pricing" className="border-t border-border">
