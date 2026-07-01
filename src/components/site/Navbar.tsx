@@ -17,7 +17,7 @@ const baseLinks: NavLink[] = [
   { label: "Privacy", kind: "hash", hash: "privacy" },
   { label: "FAQ", kind: "hash", hash: "faq" },
   { label: "Sports", kind: "external", href: "https://sports.agentos247.com" },
-  { label: "BYOK", kind: "route", to: "/byok" },
+  // { label: "BYOK", kind: "route", to: "/byok" }, // hidden per CC 2026-07-01
 ];
 
 export function Navbar() {

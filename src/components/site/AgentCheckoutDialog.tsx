@@ -226,7 +226,7 @@ export function AgentCheckoutDialog({
                         : "border-border text-muted-foreground hover:border-foreground/30"
                     }`}
                   >
-                    <span>{g === "female" ? "👩" : "👨"}</span>
+                    <span>{g === "female" ? "♀" : "♂"}</span>
                     <span className="capitalize">{t(g === "female" ? "Female" : "Male")}</span>
                   </button>
                 ))}
